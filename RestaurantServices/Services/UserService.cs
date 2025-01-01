@@ -1,6 +1,9 @@
 ﻿
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Restaurant.Data.Access.Data;
 using Restaurant.Data.Access.Repository.IRepository;
+using Restaurant.Models;
 using RestaurantServices.Services.IServices;
 using RestaurantViewModels;
 
@@ -12,12 +15,14 @@ namespace RestaurantServices.Services
 
         private IUnitOfWork _unitOfWork;
         private RestaurantDbContext _dbContext;
+     
+        
         public UserService(IUnitOfWork unitOfWork, RestaurantDbContext dbContext)
         {
 
             _unitOfWork = unitOfWork;
             _dbContext = dbContext;
-
+           
         }
 
         public async Task<List<UserVm>> GetAllUsers()
@@ -68,10 +73,14 @@ namespace RestaurantServices.Services
                 City = user.City,
                 State = user.State,
                 PostalCode = user.PostalCode,
+                Role=user.Role  
 
             };
 
             return userinfo;    
         }
+
+       
+
     }
-    }
+}

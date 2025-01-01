@@ -1,6 +1,9 @@
 ﻿
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.Models;
 using RestaurantServices.Services.IServices;
+using RestaurantViewModels;
 
 namespace RetaurantBooking.Controllers
 {
@@ -9,11 +12,17 @@ namespace RetaurantBooking.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+      
 
         public UserController(IUserService userService)
         {
             _userService = userService;
+            
         }
+
+     
+           
+        
 
         [HttpGet("GetSingleUser/{id}")]
         public IActionResult GetSingleUser(string id)

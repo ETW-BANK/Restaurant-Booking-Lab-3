@@ -4,8 +4,6 @@ using Restaurant.Data.Access.Data;
 using Restaurant.Data.Access.DbInisializer;
 using Restaurant.Data.Access.Repository;
 using Restaurant.Data.Access.Repository.IRepository;
-
-
 using ServiceRegisterExtension;
 using System.Security.Claims;
 
@@ -50,9 +48,9 @@ namespace RetaurantBooking
             {
                 options.AddPolicy("AllowSpecificOrigin", policy =>
                 {
-                    policy.WithOrigins("https://localhost:5173") 
-                          .AllowAnyMethod() 
-                          .AllowAnyHeader(); 
+                    policy.WithOrigins("https://localhost:5173")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
                 });
             });
             var app = builder.Build();
