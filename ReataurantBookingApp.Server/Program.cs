@@ -48,13 +48,13 @@ namespace RetaurantBooking
 
             builder.Services.AddCors(options =>
             {
-                var frontendUrl = configeration.GetValue<string>("frontend_url");
-                options.AddDefaultPolicy(builder =>
+                options.AddPolicy("AllowSpecificOrigin", policy =>
                 {
-                    builder.WithOrigins(frontendUrl).AllowAnyMethod().AllowAnyHeader();
+                    policy.WithOrigins("https://localhost:5173") 
+                          .AllowAnyMethod() 
+                          .AllowAnyHeader(); 
                 });
             });
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -65,7 +65,7 @@ namespace RetaurantBooking
             }
 
             app.UseHttpsRedirection();
-            app.UseCors();
+            app.UseCors("AllowSpecificOrigin");
             app.MapIdentityApi<IdentityUser>();
             app.UseAuthentication(); // Make sure authentication middleware is added
             app.UseAuthorization();

@@ -1,14 +1,21 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client'; // Use createRoot for React 18+
 import App from './App';
 import { HashRouter } from 'react-router-dom';
+import Navbar from "./Components/Navbar";
+import Footer from "./Components/Footer";
 import './App.css';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+
+// Create the root and render the components
+const root = createRoot(container);
+root.render(
   <React.StrictMode>
-   <HashRouter>
+    <HashRouter>
+      <Navbar />
       <App />
-      </HashRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
+      <Footer />
+    </HashRouter>
+  </React.StrictMode>
 );

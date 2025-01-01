@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurant.Data.Access.Repository.IRepository;
 using RestaurantServices.Services.IServices;
 using RestaurantViewModels;
-using System.Net.Http;
 using System.Security.Claims;
 
 namespace RetaurantBooking.Controllers
@@ -30,7 +29,7 @@ namespace RetaurantBooking.Controllers
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
+       
 
             if (bookingVM == null)
             {

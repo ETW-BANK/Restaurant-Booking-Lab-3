@@ -1,0 +1,76 @@
+/* BookingList.css */
+
+/* Container that centers the table */
+.booking-list-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0;
+  }
+  
+  /* Card Styling */
+  .booking-card {
+    width: 100%;
+    max-width: 1200px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Light shadow for card */
+    border-radius: 8px;
+  }
+  
+  /* Card Header Styling */
+  .booking-card-header {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Table Styling */
+  .booking-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .booking-table th,
+  .booking-table td {
+    text-align: center;
+    padding: 12px 15px;
+    border: 1px solid #ddd; /* subtle borders */
+    font-size: 16px;
+  }
+  
+  .booking-table th {
+    background-color: #1976d2; /* Primary theme color */
+    color: white;
+    font-weight: bold;
+  }
+  
+  .booking-table tr:nth-child(even) {
+    background-color: #f5f5f5; /* Light hover color */
+  }
+  
+  .booking-table tr:hover {
+    background-color: #cce7ff; /* Darker hover effect */
+  }
+  
+  .booking-table td {
+    color: #333; /* Text color */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .booking-list-container {
+      padding: 10px;
+    }
+  
+    .booking-card {
+      width: 100%;
+    }
+  
+    .booking-table th,
+    .booking-table td {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+  

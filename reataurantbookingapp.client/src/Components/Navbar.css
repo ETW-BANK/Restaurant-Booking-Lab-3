@@ -1,0 +1,120 @@
+* {
+
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+}
+
+:root {
+
+    --mainColor: #29335c;
+    --mainColorLight: #5768aa6b;
+    --secondaryColor: tomato;
+    --textColor: white;
+}
+
+header {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    padding: 0 2rem;
+    background-color: var(--mainColor);
+    color: var(--textColor);
+}
+
+.App-logo{
+ width: 50px;
+    height: 50px;
+    pointer-events: none;
+}
+
+nav a {
+
+    margin: 0 1rem;
+    color: gold;
+    text-decoration: none;
+    font-family: 'Times New Roman', Times, serif;
+
+}
+
+nav a:hover {
+
+    color: var(--secondaryColor);
+}
+
+
+header .nav-btn {
+
+    padding: 5px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: var(--textColor);
+    visibility: hidden;
+    opacity: 0;
+    font-size: 1.8rem;
+}
+nav .nav-close-btn {
+  visibility: hidden;
+}
+@media screen and (max-width: 1024px) {
+    header .nav-btn {
+        visibility: visible;
+        opacity: 1;
+        position: absolute;
+        top: 1rem;
+      
+        right: 2rem;
+       
+    }
+
+    header nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 60%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        background-color:  #a9b5e249;;
+        transition: 1s;
+        transform: translateY(-100vh);
+        
+     
+    }
+
+    header .responsive_nav {
+        transform: none;
+       
+      
+       
+     
+    }
+
+    nav .nav-close-btn {
+        display: none;
+        position: absolute;
+        top: 2rem;
+        right: 6rem;
+       
+    }
+
+
+
+    nav a {
+        font-size: 1.5rem;
+
+    }
+
+    img {
+        width: 50px; 
+        height: auto;
+        display: inline-block;
+    }
+}
