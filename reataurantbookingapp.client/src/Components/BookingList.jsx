@@ -51,7 +51,7 @@ const BookingList = () => {
                     <td>{booking.email}</td>
                     <td>{booking.phone || 'N/A'}</td>
                     <td>{booking.tableNumber}</td>
-                    <td>{booking.bookingStatus === 0 ? "Active" : "Cancelled"}</td>
+                    <td>{booking.bookingStatus === 0 ? "Cancelled" : "Active"}</td>
                   </tr>
                 ))
               ) : (

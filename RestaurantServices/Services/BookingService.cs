@@ -24,8 +24,12 @@ namespace RestaurantServices.Services
             {
                 throw new ArgumentException("Invalid booking time format.");
             }
+            if (!DateOnly.TryParse(bookingVM.BookingDate, out var bookingDate))
+            {
+                throw new ArgumentException("Invalid booking time format.");
+            }
 
-            
+
             var availableTable = _unitOfWork.TableRepository.GetFirstOrDefault(t => t.IsAvailable && t.NumberOfSeats >= bookingVM.NumberOfGuests);
             if (availableTable == null)
             {
@@ -46,7 +50,7 @@ namespace RestaurantServices.Services
             
             var booking = new Booking
             {
-                BookingDate = bookingVM.BookingDate,
+                BookingDate = bookingDate,
                 BookingTime = bookingTime,
                 NumberOfGuests = bookingVM.NumberOfGuests,
                 ApplicationUserId = bookingVM.ApplicationUserId,
@@ -79,7 +83,7 @@ namespace RestaurantServices.Services
             var bookingsList = bookings.Select(b => new BookingVM
             {
                 BookingId = b.Id,
-                BookingDate = b.BookingDate,
+                BookingDate = b.BookingDate.ToString(),
                 BookingTime = b.BookingTime.ToString(@"hh\:mm"),  
                 NumberOfGuests = b.NumberOfGuests,
                 TableId = b.Tables.Id,
@@ -107,7 +111,7 @@ namespace RestaurantServices.Services
             var existingbooking = new BookingVM
             {
                 BookingId = bookingId,
-                BookingDate = booking.BookingDate,
+                BookingDate = booking.BookingDate.ToString(),
                 BookingTime = booking.BookingTime.ToString(@"hh\:mm"),
                 NumberOfGuests = booking.NumberOfGuests,
                 TableNumber = booking.Tables.TableNumber,

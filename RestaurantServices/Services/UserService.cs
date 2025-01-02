@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Restaurant.Data.Access.Data;
 using Restaurant.Data.Access.Repository.IRepository;
-using Restaurant.Models;
 using RestaurantServices.Services.IServices;
 using RestaurantViewModels;
 

@@ -7,7 +7,7 @@ namespace RestaurantViewModels
     public class BookingVM
     {
         public int BookingId { get; set; }
-        public DateOnly BookingDate { get; set; }
+        public string BookingDate { get; set; }
         public string BookingTime { get; set; }
         public int NumberOfGuests { get; set; }
         public int TableId { get; set; } 
