@@ -36,7 +36,8 @@ namespace Restaurant.Models
 
     public enum BookingStatus
     {
-        Active,
         Cancelled,
+        Active,
+       
     }
 }
