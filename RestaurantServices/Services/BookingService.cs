@@ -159,7 +159,7 @@ namespace RestaurantServices.Services
             var table = _unitOfWork.TableRepository.GetFirstOrDefault(x => x.Id == booking.TableId);
 
 
-            DateTime currentTime = DateTime.Now;
+            //DateTime currentTime = DateTime.Now;
 
             if (table != null)
             {

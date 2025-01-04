@@ -4,8 +4,11 @@ using Restaurant.Data.Access.Data;
 using Restaurant.Data.Access.DbInisializer;
 using Restaurant.Data.Access.Repository;
 using Restaurant.Data.Access.Repository.IRepository;
+using Restaurant.Models;
+using RestaurantServices.Services.IServices;
+using RestaurantServices.Services;
 using ServiceRegisterExtension;
-using System.Security.Claims;
+using System;
 
 namespace RetaurantBooking
 {
@@ -20,30 +23,32 @@ namespace RetaurantBooking
             builder.Services.AddDbContext<RestaurantDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            // Add ASP.NET Identity services
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>() // Use your custom ApplicationUser class here
-                .AddEntityFrameworkStores<RestaurantDbContext>()
-                .AddApiEndpoints();
+            // Configure Identity
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequiredUniqueChars = 1;
 
-            builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
-            builder.Services.AddAuthorizationBuilder();
-            builder.Services.AddControllers();
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.AllowedForNewUsers = true;
 
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<RestaurantDbContext>()
+            .AddDefaultTokenProviders();
 
+            // Register other services
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IServicesRegisterExtension, ServiceRegisterExtension.ServiceRegisterExtension>();
             builder.Services.AddScoped<IDbInitilizer, DbInitializer>();
-            var serviceProvider = builder.Services.BuildServiceProvider();
-            var serviceRegisterExtension = serviceProvider.GetRequiredService<IServicesRegisterExtension>();
-            serviceRegisterExtension.RegisterServices(builder.Services);
-            var configeration = serviceProvider.GetRequiredService<IConfiguration>();
-
-
-
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
+            builder.Services.AddScoped<IServicesRegisterExtension, ServiceRegisterExtension.ServiceRegisterExtension>();
+           builder.Services.AddScoped<IUserService, UserService>();
+            // Configure CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin", policy =>
@@ -53,9 +58,15 @@ namespace RetaurantBooking
                           .AllowAnyHeader();
                 });
             });
+
+            // Add controllers and Swagger
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -64,25 +75,21 @@ namespace RetaurantBooking
 
             app.UseHttpsRedirection();
             app.UseCors("AllowSpecificOrigin");
-            app.MapIdentityApi<IdentityUser>();
-            app.UseAuthentication(); // Make sure authentication middleware is added
-            app.UseAuthorization();
-            SeedDatabase();
+            app.UseAuthentication(); // Use authentication middleware
+            app.UseAuthorization(); // Use authorization middleware
+
+            // Map controllers and initialize database
             app.MapControllers();
+            SeedDatabase(app);
 
-
-            app.MapGet("/test", (ClaimsPrincipal user) => $"hello{user.Identity!.Name}").RequireAuthorization();
             app.Run();
+        }
 
-            void SeedDatabase()
-            {
-                using (var scope = app.Services.CreateScope())
-                {
-                    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitilizer>();
-
-                    dbInitializer.Initialize();
-                }
-            }
+        private static void SeedDatabase(IApplicationBuilder app)
+        {
+            using var scope = app.ApplicationServices.CreateScope();
+            var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitilizer>();
+            dbInitializer.Initialize();
         }
     }
 }

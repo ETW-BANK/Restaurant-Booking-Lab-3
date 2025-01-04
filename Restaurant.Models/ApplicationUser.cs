@@ -14,7 +14,8 @@ namespace Restaurant.Models
         public string? City { get; set; }
         public string? State { get; set; }
         public string? PostalCode { get; set; }
-
+  
+        public DateTime? LastLogin { get; set; }
         [NotMapped]
         public string Role { get; set; }
     }

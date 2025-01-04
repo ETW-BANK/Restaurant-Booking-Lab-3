@@ -5,6 +5,8 @@ import Booking from "./Components/Booking";
 import BookingList from './Components/BookingList';
 import UserList from './Components/UserList';
 import Tablelist from './Components/TableList';
+import Login from './Components/Login';
+import Register from './Components/Regisetr';
 import "./App.css";
 
 
@@ -17,6 +19,8 @@ const App = () => {
     { path: "/booking-list", element: <BookingList /> },
     { path: "/user-list", element: <UserList /> },
     { path: "/table-list", element: <Tablelist /> },
+    { path: "/login", element: <Login /> },
+    { path: "/register", element: <Register /> },
   ]);
 
   return routes;
