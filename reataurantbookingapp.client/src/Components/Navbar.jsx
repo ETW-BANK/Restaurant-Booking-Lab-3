@@ -21,6 +21,7 @@ function Navbar() {
                 <Link to="/user-list">User List</Link>
                 <Link to="/booking-list">Booking List</Link>
                 <Link to="/table-list">Table List</Link>
+                <Link to="/admin">List Of admins</Link>
                 <button className="nav-close-btn" onClick={toggleNavbar}>
                     <FaTimes />
                 </button>

@@ -7,6 +7,7 @@ import UserList from './Components/UserList';
 import Tablelist from './Components/TableList';
 import Login from './Components/Login';
 import Register from './Components/Regisetr';
+import Admin from './Components/Admin';
 import "./App.css";
 
 
@@ -21,6 +22,7 @@ const App = () => {
     { path: "/table-list", element: <Tablelist /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
+    { path: "/admin", element: <Admin /> },
   ]);
 
   return routes;

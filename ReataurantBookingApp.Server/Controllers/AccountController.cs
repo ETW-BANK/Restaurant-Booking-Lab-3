@@ -132,7 +132,7 @@ namespace ReataurantBookingApp.Server.Controllers
             return Ok(new { message = message });
         }
 
-        [HttpGet("admin"), Authorize]
+        [HttpGet("admin")/*, Authorize*/]
         public async Task<ActionResult> AdminPage()
         {
             try
@@ -164,7 +164,7 @@ namespace ReataurantBookingApp.Server.Controllers
                     return NotFound("No admin users found.");
                 }
 
-                return Ok(new { adminUsers });
+                return Ok(new {Users= adminUsers });
             }
             catch (Exception ex)
             {
