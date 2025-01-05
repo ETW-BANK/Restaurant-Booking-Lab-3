@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurant.Models;
 using Restaurant.Utility;
 using RestaurantViewModels;
+using System.Data;
 using System.Linq.Expressions;
 using System.Security.Claims;
 
@@ -34,6 +35,7 @@ namespace ReataurantBookingApp.Server.Controllers
 
             var applicationUser = new ApplicationUser
             {
+                
                 UserName = userVm.Email,
                 Email = userVm.Email,
                 Name = userVm.Name,
@@ -99,7 +101,7 @@ namespace ReataurantBookingApp.Server.Controllers
                     message = "Logged in successfully",
                     user = new
                     {
-                        _user.Name,
+                      
                         _user.Email,
                      
                     }
@@ -177,12 +179,29 @@ namespace ReataurantBookingApp.Server.Controllers
         public async Task< ActionResult> HomePage(string email)
         {
             ApplicationUser UserInfo = await _userManager.FindByEmailAsync(email);
-
-           if(UserInfo==null)
+           var Role=await _userManager.GetRolesAsync(UserInfo);
+            var userRole = Role.FirstOrDefault();
+            if (UserInfo==null)
             {
                 return BadRequest("Somthing Went Wrong Please try Agin");
             }
-           return Ok(new { UserInfo= UserInfo }); 
+           var result = new UserVm
+            {
+                Id = UserInfo.Id,
+                StreetAddress = UserInfo.StreetAddress,
+                City = UserInfo.City,
+                Email = UserInfo.Email,
+                Role = userRole,
+                Name = UserInfo.Name,
+                State=UserInfo.State,
+                PostalCode = UserInfo.PostalCode,
+                PhoneNumber = UserInfo.PhoneNumber
+
+                
+
+            };
+         
+           return Ok(result); 
         }
 
         [HttpGet("xhtlekd")]

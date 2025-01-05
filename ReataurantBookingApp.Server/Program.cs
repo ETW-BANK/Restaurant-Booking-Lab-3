@@ -55,7 +55,8 @@ namespace RetaurantBooking
                 {
                     policy.WithOrigins("https://localhost:5173")
                           .AllowAnyMethod()
-                          .AllowAnyHeader();
+                          .AllowAnyHeader()
+                          .AllowCredentials(); 
                 });
             });
 
