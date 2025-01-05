@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidepic from '../assets/bg-hero.jpg';
-
+import { Link } from 'react-router-dom';
 const Login = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -114,6 +114,13 @@ const Login = () => {
                         </form>
 
                         <div className="message" style={{ color: 'red', textAlign: 'center' }}></div>
+
+                        <div style={{ marginTop: "20px", textAlign: "center" }}>
+                            Don't Have An Account?{" "}
+                            <Link to="/register" style={{ color: "#4CAF50", textDecoration: "underline" }}>
+                                Register
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

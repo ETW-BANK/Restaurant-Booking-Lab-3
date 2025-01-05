@@ -3,42 +3,41 @@ import Sidepic from '../assets/bg-hero.jpg';
 
 const Register = () => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
 
-    // Check if the user is already logged in (via localStorage)
     useEffect(() => {
         try {
+            
+           
+            localStorage.clear();
+
             const user = localStorage.getItem("user");
             if (user) {
                 document.location = "/";
             }
         } catch (error) {
-            console.error("localStorage access denied:", error);
+            console.error("LocalStorage access denied:", error);
         }
     }, []);
 
-    // Handle form submission for registration
-    async function RegisterHandler(e) {
+    const RegisterHandler = async (e) => {
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
         const dataTosend = {};
 
-        // Collect form data into the dataTosend object
         formData.forEach((value, key) => {
             dataTosend[key] = value;
         });
 
-        // Clean the name field by removing spaces
-        const newUserName = dataTosend.name.trim().split(" ");
-        dataTosend.name = newUserName.join("");
+        // Clean up the user's name
+        const formattedName = dataTosend.name.trim().replace(/\s+/g, "");
+        dataTosend.name = formattedName;
 
-        // Include a placeholder value for id to satisfy backend validation (e.g. "0")
+        // Add a default ID if not provided
         if (!dataTosend.id) {
-            dataTosend.id = "0"; // Or you could set it to null or any value that satisfies the backend validation
+            dataTosend.id = "0";
         }
 
-        // Set loading state to true while sending the request
         setLoading(true);
         try {
             const response = await fetch("https://localhost:7090/api/Account/register", {
@@ -47,25 +46,25 @@ const Register = () => {
                 body: JSON.stringify(dataTosend),
                 headers: {
                     "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
+                    "Accept": "application/json",
+                },
             });
 
             const data = await response.json();
             setLoading(false);
 
             if (response.ok) {
-                document.location = "/login"; // Redirect to login page on successful registration
+                document.location = "/login";
             } else {
-                const messageEL = document.querySelector(".message");
-                messageEL.innerHTML = data.message || "Something went wrong, please try again.";
-                console.log("Registration Failed:", data);
+                const messageEl = document.querySelector(".message");
+                messageEl.innerHTML = data.message || "Something went wrong, please try again.";
+                console.error("Registration Failed:", data);
             }
         } catch (error) {
             setLoading(false);
             console.error("Error during registration:", error);
         }
-    }
+    };
 
     return (
         <div className="formbold-main-wrapper">
@@ -80,19 +79,7 @@ const Register = () => {
                             Register Here
                         </h2>
                         <form onSubmit={RegisterHandler}>
-
-
-                            <div className="formbold-mb-5">
-                                <label htmlFor="id" className="formbold-form-label"></label>
-                                <input
-                                    type="hidden"
-                                    name="id"
-                                    id="id"
-                                    value="0"
-                                    className="formbold-form-input"
-                                />
-                            </div>
-
+                            <input type="hidden" name="id" id="id" value="0" />
 
                             <div className="formbold-mb-5">
                                 <label htmlFor="name" className="formbold-form-label">Name</label>
@@ -106,7 +93,6 @@ const Register = () => {
                                 />
                             </div>
 
-
                             <div className="formbold-mb-5">
                                 <label htmlFor="email" className="formbold-form-label">Email</label>
                                 <input
@@ -118,7 +104,6 @@ const Register = () => {
                                     required
                                 />
                             </div>
-
 
                             <div className="formbold-mb-5">
                                 <label htmlFor="password" className="formbold-form-label">Password</label>
@@ -132,7 +117,6 @@ const Register = () => {
                                 />
                             </div>
 
-
                             <div className="formbold-mb-5">
                                 <label htmlFor="streetAddress" className="formbold-form-label">Address</label>
                                 <input
@@ -143,7 +127,6 @@ const Register = () => {
                                     className="formbold-form-input"
                                 />
                             </div>
-
 
                             <div className="formbold-mb-5">
                                 <label htmlFor="city" className="formbold-form-label">City</label>
@@ -156,7 +139,6 @@ const Register = () => {
                                 />
                             </div>
 
-
                             <div className="formbold-mb-5">
                                 <label htmlFor="postalCode" className="formbold-form-label">Postal Code</label>
                                 <input
@@ -167,7 +149,6 @@ const Register = () => {
                                     className="formbold-form-input"
                                 />
                             </div>
-
 
                             <div className="formbold-mb-5">
                                 <label htmlFor="phoneNumber" className="formbold-form-label">Phone Number</label>
@@ -180,12 +161,12 @@ const Register = () => {
                                 />
                             </div>
 
-
                             <div>
-                                <button type="submit" className="formbold-btn">Register</button>
+                                <button type="submit" className="formbold-btn">
+                                    {loading ? "Registering..." : "Register"}
+                                </button>
                             </div>
                         </form>
-
 
                         <div className="message" style={{ color: 'red', textAlign: 'center' }}></div>
                     </div>
@@ -193,6 +174,6 @@ const Register = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Register;
