@@ -9,6 +9,8 @@ using RestaurantServices.Services.IServices;
 using RestaurantServices.Services;
 using ServiceRegisterExtension;
 using System;
+using Restaurant.Data.Access.Repository.Services.IServices;
+using Restaurant.Data.Access.Repository.Services;
 
 namespace RetaurantBooking
 {
@@ -48,6 +50,8 @@ namespace RetaurantBooking
             builder.Services.AddScoped<IDbInitilizer, DbInitializer>();
             builder.Services.AddScoped<IServicesRegisterExtension, ServiceRegisterExtension.ServiceRegisterExtension>();
            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
+            builder.Services.AddScoped<ITableService, TableService>();
             // Configure CORS
             builder.Services.AddCors(options =>
             {
