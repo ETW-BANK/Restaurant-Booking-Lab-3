@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurant.Models;
 using Restaurant.Utility;
 using RestaurantViewModels;
-using System.Data;
-using System.Linq.Expressions;
 using System.Security.Claims;
+
+
 
 namespace ReataurantBookingApp.Server.Controllers
 {
@@ -14,15 +14,16 @@ namespace ReataurantBookingApp.Server.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-       private readonly SignInManager<ApplicationUser> _signInManager;  
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-
-        public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly ILogger<AccountController> _logger;
+        public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ILogger<AccountController> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            this._roleManager = roleManager;
+            _roleManager = roleManager;
+            _logger = logger;
 
         }
         [HttpPost("register")]
@@ -35,7 +36,7 @@ namespace ReataurantBookingApp.Server.Controllers
 
             var applicationUser = new ApplicationUser
             {
-                
+
                 UserName = userVm.Email,
                 Email = userVm.Email,
                 Name = userVm.Name,
@@ -45,6 +46,12 @@ namespace ReataurantBookingApp.Server.Controllers
                 PostalCode = userVm.PostalCode,
                 PhoneNumber = userVm.PhoneNumber
             };
+            if (userVm.Role == null)
+            {
+                userVm.Role = StaticData.Role_Customer;
+            };
+
+
 
             var result = await _userManager.CreateAsync(applicationUser, userVm.Password);
 
@@ -61,92 +68,80 @@ namespace ReataurantBookingApp.Server.Controllers
             return Ok(new { message = "User registered successfully!" });
         }
 
-
         [HttpPost("login")]
         public async Task<ActionResult> LoginUser(Login login)
         {
-            if (login == null || string.IsNullOrEmpty(login.Email) || string.IsNullOrEmpty(login.Password))
-            {
-                return BadRequest("Email and Password are required.");
-            }
+            string message;
 
             try
             {
-                
-                ApplicationUser _user = await _userManager.FindByEmailAsync(login.Email);
-                if (_user == null)
+                ApplicationUser user_ = await _userManager.FindByEmailAsync(login.Email);
+
+                if (user_ != null && !user_.EmailConfirmed)
                 {
-                    return Unauthorized("Invalid login credentials.");
+
+                    user_.EmailConfirmed = true;
                 }
 
-               
-              _user.EmailConfirmed= true;   
+                var result = await _signInManager.PasswordSignInAsync(user_, login.Password, login.RmemberMe, false);
 
-                
-                var result = await _signInManager.PasswordSignInAsync(_user, login.Password, login.RmemberMe, false);
                 if (!result.Succeeded)
                 {
-                    return Unauthorized("Invalid login credentials.");
+                    return Unauthorized(new { message = "Check your login credentials and try again" });
                 }
 
-              
-                var updateResult = await _userManager.UpdateAsync(_user);
-                if (!updateResult.Succeeded)
-                {
-                    return StatusCode(500, "Unable to update login timestamp.");
-                }
+                user_.LastLogin = DateTime.Now;
+                var updateResult = await _userManager.UpdateAsync(user_);
 
-                return Ok(new
-                {
-                    message = "Logged in successfully",
-                    user = new
-                    {
-                      
-                        _user.Email,
-                     
-                    }
-                });
+                message = "Login Sucessfull";
             }
+
+
+
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while processing your request: " + ex.Message);
+                return BadRequest(new { message = "Something went wrong, please try again. " + ex.Message });
             }
+
+            // Return the user ID along with the login success message
+            return Ok(new { message = message });
         }
 
+        [HttpGet("logout"), Authorize]
 
-        [HttpGet("logout"),Authorize]
-
-        public async Task<ActionResult> Logout()
+        public async Task<ActionResult> LogoutUser()
         {
-            string message = "Signd Out Succesfully";
+            string message;
 
             try
             {
                 await _signInManager.SignOutAsync();
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest("Somthing Went Wrong Please try Agin" + ex.Message);
             }
 
-         
+            message = "Signd Out Succcesfully";
+
             return Ok(new { message = message });
         }
 
-        [HttpGet("admin")/*, Authorize*/]
+        [HttpGet("admin"), Authorize]
         public async Task<ActionResult> AdminPage()
         {
             try
             {
                 var users = _userManager.Users.ToList();
 
-               
+
                 var adminUsers = new List<object>();
 
                 foreach (var user in users)
                 {
                     if (await _userManager.IsInRoleAsync(user, StaticData.Role_Admin))
                     {
-                        
+
                         var roles = await _userManager.GetRolesAsync(user);
 
                         adminUsers.Add(new
@@ -154,7 +149,7 @@ namespace ReataurantBookingApp.Server.Controllers
                             user.Id,
                             user.Name,
                             user.Email,
-                            Roles = roles 
+                            Roles = roles
                         });
                     }
                 }
@@ -164,7 +159,7 @@ namespace ReataurantBookingApp.Server.Controllers
                     return NotFound("No admin users found.");
                 }
 
-                return Ok(new {Users= adminUsers });
+                return Ok(new { Users = adminUsers });
             }
             catch (Exception ex)
             {
@@ -174,18 +169,18 @@ namespace ReataurantBookingApp.Server.Controllers
 
 
 
-        [HttpGet("home/{email}"), Authorize]
 
-        public async Task< ActionResult> HomePage(string email)
+        [HttpGet("home/{email}"),Authorize]
+        public async Task<ActionResult> HomePage(string email)
         {
-            ApplicationUser UserInfo = await _userManager.FindByEmailAsync(email);
-           var Role=await _userManager.GetRolesAsync(UserInfo);
-            var userRole = Role.FirstOrDefault();
-            if (UserInfo==null)
+            var UserInfo = await _userManager.FindByEmailAsync(email);
+            if (UserInfo == null)
             {
-                return BadRequest("Somthing Went Wrong Please try Agin");
+                return NotFound("User not found");
             }
-           var result = new UserVm
+            var Role = await _userManager.GetRolesAsync(UserInfo);
+            var userRole = Role.FirstOrDefault();
+            var result = new UserVm
             {
                 Id = UserInfo.Id,
                 StreetAddress = UserInfo.StreetAddress,
@@ -193,45 +188,57 @@ namespace ReataurantBookingApp.Server.Controllers
                 Email = UserInfo.Email,
                 Role = userRole,
                 Name = UserInfo.Name,
-                State=UserInfo.State,
+                State = UserInfo.State,
                 PostalCode = UserInfo.PostalCode,
                 PhoneNumber = UserInfo.PhoneNumber
-
-                
-
             };
-         
-           return Ok(result); 
+            return Ok(result);
         }
 
         [HttpGet("xhtlekd")]
-
         public async Task<ActionResult> CheckUser()
         {
-
-            string message = "";
-            ApplicationUser CurrentUser = new();
+            string message;
+            ApplicationUser currentUser = new();
             try
             {
-                var _user = HttpContext.User;
-                var procincipals = new ClaimsPrincipal(_user);
-                var result = _signInManager.IsSignedIn(procincipals);
+                var user_ = HttpContext.User;
+                var principals = new ClaimsPrincipal(user_);
+                var result = _signInManager.IsSignedIn(principals);
 
                 if (result)
                 {
-                    CurrentUser = await _signInManager.UserManager.GetUserAsync(procincipals);
+                    currentUser = await _signInManager.UserManager.GetUserAsync(principals);
                 }
                 else
                 {
-                    return Forbid("Access Denied");
+                    message = "Access Denied";
+                    return Forbid(message);
                 }
-            }catch (Exception ex)
+
+
+            }
+            catch (Exception ex)
             {
-                return BadRequest("Somthing Went Wrong Please try Agin" + ex.Message);
+                return BadRequest("Somthing Went Wrong" + ex.Message);
             }
 
-            return Ok(new {message=message,user=CurrentUser.Id});
+            message = "Logged in Succesfully";
+            return Ok(currentUser.Id);
         }
 
+        [HttpGet("UserInfo")]
+        public IActionResult GetUserInfo()
+        {
+            
+            var userId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User is not authenticated.");
+            }
+
+            return Ok(new { UserId = userId });
+        }
     }
 }
+

@@ -11,6 +11,7 @@ using ServiceRegisterExtension;
 using System;
 using Restaurant.Data.Access.Repository.Services.IServices;
 using Restaurant.Data.Access.Repository.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace RetaurantBooking
 {
@@ -25,10 +26,11 @@ namespace RetaurantBooking
             builder.Services.AddDbContext<RestaurantDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            // Configure Identity
+            // Configure Identity API Endpoints
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = true;
+                // Identity options setup
+                options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireDigit = true;
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = true;
@@ -42,16 +44,17 @@ namespace RetaurantBooking
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
             })
-            .AddEntityFrameworkStores<RestaurantDbContext>()
-            .AddDefaultTokenProviders();
+.AddEntityFrameworkStores<RestaurantDbContext>() // Ensure your DbContext is properly set up
+.AddDefaultTokenProviders();
+
 
             // Register other services
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IDbInitilizer, DbInitializer>();
-            builder.Services.AddScoped<IServicesRegisterExtension, ServiceRegisterExtension.ServiceRegisterExtension>();
-           builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IBookingService, BookingService>();
             builder.Services.AddScoped<ITableService, TableService>();
+
             // Configure CORS
             builder.Services.AddCors(options =>
             {
@@ -60,12 +63,13 @@ namespace RetaurantBooking
                     policy.WithOrigins("https://localhost:5173")
                           .AllowAnyMethod()
                           .AllowAnyHeader()
-                          .AllowCredentials(); 
+                          .AllowCredentials();
                 });
             });
 
             // Add controllers and Swagger
             builder.Services.AddControllers();
+            builder.Services.AddAuthorization();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -80,8 +84,9 @@ namespace RetaurantBooking
 
             app.UseHttpsRedirection();
             app.UseCors("AllowSpecificOrigin");
-            app.UseAuthentication(); // Use authentication middleware
-            app.UseAuthorization(); // Use authorization middleware
+
+            app.UseAuthentication(); // Ensure Authentication middleware is added
+            app.UseAuthorization();
 
             // Map controllers and initialize database
             app.MapControllers();
@@ -96,5 +101,6 @@ namespace RetaurantBooking
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitilizer>();
             dbInitializer.Initialize();
         }
+
     }
 }

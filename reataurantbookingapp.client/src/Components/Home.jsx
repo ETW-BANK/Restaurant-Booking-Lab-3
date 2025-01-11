@@ -1,52 +1,92 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiArrowRight } from "react-icons/fi";
-
 
 const Home = () => {
     const navigate = useNavigate();
+    const [userInfo, setUserInfo] = useState({});
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        let user = null;
+        try {
+            user = localStorage.getItem("user"); // Safely access localStorage
+        } catch (e) {
+            console.error("Error accessing localStorage:", e);
+            setError("Unable to access localStorage. Please check your browser settings.");
+            return;
+        }
+
+        if (!user) {
+            navigate("/login"); // Redirect to login if no user found
+            return;
+        }
+
+        fetch(`https://localhost:7090/api/Account/home/${user}`, {
+            method: "GET",
+            credentials: "include",
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch user info");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setUserInfo(data.result);
+                console.log("User info:", data.result);
+            })
+            .catch((error) => {
+                console.error("Error fetching user info:", error);
+                setError("Failed to load user info. Please try again later.");
+            });
+    }, [navigate]);
 
     const handleBookingClick = () => {
         navigate("/booking");
-
-     const [userInfo,SetUserInfo]=useState([])
-
-     useEffect(()=>{
-
-        const user=localStorage.getItem("user")
-        fetch("https://localhost:7090/api/Account/home/"+user,{
-            method:"GET",
-            credentials:"include"
-        }).then(response=>response.json()).then(data=>{
-            SetUserInfo(data.UserInfo)
-            console.log("User Info",data.UserInfo)
-        }).catch(error=>{
-
-            console.log("Error Home Page",error)
-        })
-     },[])
     };
 
     return (
-      
-       
         <div className="home-container">
             <div className="home-banner-container">
-               
                 <div className="home-text-section">
-
                     <h1 className="primary-heading">
-                        Welcom to<br/> <span>Green Restaurant</span>
-                        
+                        Welcome to
+                        <br />
+                        <span>Green Restaurant</span>
                     </h1>
                     <button className="secondary-button" onClick={handleBookingClick}>
-                        Book Yur Table Now <FiArrowRight />
+                        Book Your Table Now
                     </button>
+
+                
+                    {userInfo && (
+                        <div className="user-info">
+                            <p>
+                                <strong>Name:</strong> {userInfo.name}
+                            </p>
+                            <p>
+                                <strong>Email:</strong> {userInfo.email}
+                            </p>
+                            <p>
+                                <strong>Address:</strong> {userInfo.streetAddress}, {userInfo.city},{" "}
+                                {userInfo.state}, {userInfo.postalCode}
+                            </p>
+                            <p>
+                                <strong>Last Login:</strong>{" "}
+                                {userInfo.lastLogin
+                                    ? new Date(userInfo.lastLogin).toLocaleString()
+                                    : "No data available"}
+                            </p>
+                            <p>
+                                <strong>Role:</strong> {userInfo.role || "No Role Assigned"}
+                            </p>
+                        </div>
+                    )}
+
+                    {error && <p className="error-message">{error}</p>}
                 </div>
-              
             </div>
         </div>
-       
     );
 };
 

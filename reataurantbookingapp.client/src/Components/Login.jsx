@@ -1,66 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import Sidepic from '../assets/bg-hero.jpg';
-import { Link } from 'react-router-dom';
-const Login = () => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+import React, { useEffect } from "react";
+import Sidepic from "../assets/bg-hero.jpg";
+import { Link } from "react-router-dom";
 
+const Login = () => {
     useEffect(() => {
-        try {
-            const user = localStorage.getItem("user");
-            if (user) {
-                document.location = "/";
-            }
-        } catch (error) {
-            console.error("localStorage access denied:", error);
+        document.title = "Login";
+
+        const user = localStorage.getItem("user");
+        if (user) {
+            document.location = "/";
         }
     }, []);
-
-    async function LoginHandler(e) {
-        e.preventDefault();
-        const form = e.target;
-        const formData = new FormData(form);
-        const dataTosend = {};
-
-        formData.forEach((value, key) => {
-            if (key === "email") {
-                dataTosend["Email"] = value;
-            } else {
-                dataTosend[key] = value;
-            }
-        });
-
-        if (dataTosend.Remember === "on") {
-            dataTosend.Remember = true;
-        }
-
-        setLoading(true);
-        const response = await fetch("https://localhost:7090/api/Account/login", {
-            method: "POST",
-            credentials: "include",
-            body: JSON.stringify(dataTosend),
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        });
-
-        const data = await response.json();
-        setLoading(false);
-
-        if (response.ok) {
-            try {
-                localStorage.setItem("user", dataTosend.Email);
-            } catch (error) {
-                console.error("Failed to set user in localStorage:", error);
-            }
-            document.location = "/";
-        } else {
-            const messageEL = document.querySelector(".message");
-            messageEL.innerHTML = data.message || "Something went wrong, please try again.";
-            console.log("Login Failed:", data);
-        }
-    }
 
     return (
         <div className="formbold-main-wrapper">
@@ -74,15 +24,16 @@ const Login = () => {
                         <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#4CAF50" }}>
                             Log in Here
                         </h2>
-                        <form onSubmit={LoginHandler}>
+                        <form action="#" onSubmit={LoginHandler}>
                             <div className="formbold-mb-5">
                                 <label htmlFor="email" className="formbold-form-label">Email</label>
                                 <input
                                     type="email"
-                                    name="email"
+                                    name="Email"
                                     id="email"
                                     placeholder="Enter Your Email"
                                     className="formbold-form-input"
+                                    required
                                 />
                             </div>
 
@@ -90,7 +41,7 @@ const Login = () => {
                                 <label htmlFor="password" className="formbold-form-label">Password</label>
                                 <input
                                     type="password"
-                                    name="password"
+                                    name="Password"
                                     id="password"
                                     placeholder="Enter Your Password"
                                     className="formbold-form-input"
@@ -126,6 +77,48 @@ const Login = () => {
             </div>
         </div>
     );
+};
+
+async function LoginHandler(e) {
+    e.preventDefault();
+    const form_ = e.target;
+    const formData = new FormData(form_);
+    const dataTosend = {};
+
+    for (const [key, value] of formData.entries()) {
+        dataTosend[key] = value;
+    }
+
+    if (dataTosend.Remember === "on") {
+        dataTosend.Remember = true;
+    }
+
+    const response = await fetch("https://localhost:7090/api/Account/login", {
+        method: "POST",
+        body: JSON.stringify(dataTosend),
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        localStorage.setItem("user", dataTosend.Email);
+        document.location = "/";
+    }
+
+    const messageEl = document.querySelector(".message");
+    if (messageEl) {
+        if (data.message) {
+            messageEl.innerHTML = data.message;
+        } else {
+            messageEl.innerHTML = "Something Went Wrong Please Try Again";
+        }
+    }
+
+    console.log("Login Error", data);
 }
 
 export default Login;

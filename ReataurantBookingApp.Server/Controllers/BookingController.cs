@@ -24,7 +24,7 @@ namespace RetaurantBooking.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+   
         public async Task<IActionResult> Create([FromBody] BookingVM bookingVM)
         {
 

@@ -1,98 +1,128 @@
-import React, { useState } from "react";
-import Sidepic from '../assets/bg-hero.jpg'; // Ensure path is correct
+import React, { useState, useEffect } from "react";
+import Axios from "axios";
 
 const BookingForm = () => {
-  const [formData, setFormData] = useState({
-    guest: "",
-    date: "",
-    time: "",
-  });
+  const [userId, setUserId] = useState(null);
+  const [guest, setGuest] = useState(0);
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [tableId, setTableId] = useState(0);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(true); 
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  
+  useEffect(() => {
+    Axios.get("https://localhost:7090/api/Account/xhtlekd", { withCredentials: true })
+      .then((response) => {
+        if (response.data) {
+          setUserId(response.data);  
+          localStorage.setItem("user", response.data); 
+          
+          setIsLoading(false); 
+        } else {
+          console.error("No user data in response");
+          setIsLoading(false); 
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching user data:", err);
+        setIsLoading(false); 
+      });
+  }, []);
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
+ 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!userId) {
+      console.error("User ID is not available.");
+      return;
+    }
+
+   
+    const bookingData = {
+      ApplicationUserId: userId, 
+      BookingDate: date,
+      BookingTime: time,
+      NumberOfGuests: guest,
+      TableId: tableId,
+      Name: name || null,  
+      Phone: phone || null,  
+      Email: email || null, 
+      BookingStatus: 0,  
+    };
+
+    
+    console.log("Booking data:", bookingData);
+
+    try {
+      
+      const response = await Axios.post("https://localhost:7090/api/Booking/Create", bookingData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Booking created successfully:", response.data);
+    } catch (error) {
+      console.error("Error creating booking:", error.response?.data || error.message);
+    }
   };
 
   return (
-    <div className="formbold-main-wrapper">
-      <div className="formbold-form-wrapper">
-        <div className="formbold-content">
-          {/* Left Column (Image) */}
-          <div className="formbold-image-column">
-            <img src={Sidepic} alt="Restaurant" className="formbold-image" />
-          </div>
-
-          {/* Right Column (Form) */}
-          <div className="formbold-form-column">
-            <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#4CAF50" }}>
-              Book Your Table
-            </h2>
-            <form onSubmit={handleSubmit}>
-              <div className="formbold-mb-5">
-                <label htmlFor="guest" className="formbold-form-label">
-                  Number of Guests
-                </label>
-                <input
-                  type="number"
-                  name="guest"
-                  id="guest"
-                  placeholder="Enter number of guests"
-                  className="formbold-form-input"
-                  value={formData.guest}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="formbold-mb-5">
-                <label htmlFor="date" className="formbold-form-label">
-                  Date
-                </label>
-                <input
-                  type="date"
-                  name="date"
-                  id="date"
-                  className="formbold-form-input"
-                  value={formData.date}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="formbold-mb-5">
-                <label htmlFor="time" className="formbold-form-label">
-                  Time
-                </label>
-                <input
-                  type="time"
-                  name="time"
-                  id="time"
-                  className="formbold-form-input"
-                  value={formData.time}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div>
-                <button type="submit" className="formbold-btn">
-                 Book Now
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+    <div>
+      {isLoading ? (
+        <p>Loading user data...</p>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="number"
+            placeholder="Guests"
+            value={guest}
+            onChange={(e) => setGuest(e.target.value)}
+            required
+          />
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+          />
+          <input
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            required
+          />
+          <input
+            type="number"
+            placeholder="Table ID"
+            value={tableId}
+            onChange={(e) => setTableId(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button type="submit" disabled={!userId}>Book</button>
+        </form>
+      )}
     </div>
   );
 };
