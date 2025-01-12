@@ -28,7 +28,7 @@ namespace RetaurantBooking.Controllers
         public async Task<IActionResult> Create([FromBody] BookingVM bookingVM)
         {
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
+          var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
        
 
@@ -36,6 +36,7 @@ namespace RetaurantBooking.Controllers
             {
                 return BadRequest("Invalid booking details.");
             }
+         
 
             _bookingService.CreateBooking(bookingVM);
 

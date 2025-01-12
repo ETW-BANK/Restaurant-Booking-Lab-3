@@ -10,7 +10,7 @@ function Navbar() {
     const navRef = useRef();
     const navigate = useNavigate();
 
-    
+   
     useEffect(() => {
         const user = localStorage.getItem('user');
         setIsLoggedIn(!!user); 
@@ -26,31 +26,27 @@ function Navbar() {
                 method: "GET",
                 credentials: "include"
             });
-
-         
-            const contentType = response.headers.get("Content-Type");
-            let data = {};
-
-            if (contentType && contentType.includes("application/json")) {
-                data = await response.json();
-            } else {
-                console.error("Invalid response format");
-                return;
-            }
+            const data = await response.json();
 
             if (response.ok) {
-                localStorage.removeItem("user");
-                setIsLoggedIn(false);
+                localStorage.removeItem("user"); 
+                setIsLoggedIn(false); 
                 alert(data.message); 
                 navigate("/"); 
             } else {
-                console.error("Could not log out:", data.message || "Unknown error");
+                console.error("Could not log out");
             }
         } catch (error) {
             console.error("Error during logout:", error);
         }
     };
 
+    const handleLoginSuccess = (user) => {
+       
+        localStorage.setItem('user', JSON.stringify(user)); 
+        setIsLoggedIn(true); 
+        navigate("/"); 
+    };
 
     return (
         <header>
@@ -77,7 +73,7 @@ function Navbar() {
                         </Link>
                     </>
                 ) : (
-                    <button className="nav-icon" onClick={handleLogout} style={{ backgroundColor: 'transparent', color: 'red' }}>
+                    <button className="nav-icon" onClick={handleLogout}>
                         <FaSignOutAlt /> Logout
                     </button>
                 )}

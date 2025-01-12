@@ -60,8 +60,8 @@ const BookingForm = () => {
       });
       console.log("Booking created successfully:", response.data);
 
-      // After a successful booking, navigate to the homepage (no logic change)
-      window.location.href = "/"; // Navigate to home page after booking (without using useNavigate)
+     
+      window.location.href = "/"; 
     } catch (error) {
       console.error("Error creating booking:", error.response?.data || error.message);
     }
