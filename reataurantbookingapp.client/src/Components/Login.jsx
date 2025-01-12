@@ -8,18 +8,18 @@ const Login = () => {
 
     useEffect(() => {
         document.title = "Login";
-        
+
         try {
             const user = localStorage.getItem("user");
             if (user) {
-                document.location = "/"; 
+                document.location = "/";
             }
         } catch (error) {
             console.error("localStorage access denied:", error);
         }
     }, []);
 
-    
+
     const LoginHandler = async (e) => {
         e.preventDefault();
         const form = e.target;
@@ -28,7 +28,7 @@ const Login = () => {
 
         formData.forEach((value, key) => {
             if (key === "email") {
-                dataTosend["Email"] = value; 
+                dataTosend["Email"] = value;
             } else {
                 dataTosend[key] = value;
             }
@@ -43,7 +43,7 @@ const Login = () => {
         try {
             const response = await fetch("https://localhost:7090/api/Account/login", {
                 method: "POST",
-                credentials: "include", 
+                credentials: "include",
                 body: JSON.stringify(dataTosend),
                 headers: {
                     "Content-Type": "application/json",
@@ -56,11 +56,11 @@ const Login = () => {
 
             if (response.ok) {
                 try {
-                    localStorage.setItem("user", dataTosend.Email); 
+                    localStorage.setItem("user", dataTosend.Email);
                 } catch (error) {
                     console.error("Failed to set user in localStorage:", error);
                 }
-                document.location = "/"; 
+                document.location = "/";
             } else {
                 setError(data.message || "Something went wrong, please try again.");
             }

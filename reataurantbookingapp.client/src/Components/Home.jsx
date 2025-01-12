@@ -9,7 +9,7 @@ const Home = () => {
     useEffect(() => {
         let user = null;
         try {
-            user = localStorage.getItem("user"); 
+            user = localStorage.getItem("user");
         } catch (e) {
             console.error("Error accessing localStorage:", e);
             setError("Unable to access localStorage. Please check your browser settings.");
@@ -17,7 +17,7 @@ const Home = () => {
         }
 
         if (!user) {
-            navigate("/"); 
+            navigate("/");
             return;
         }
 
@@ -42,7 +42,12 @@ const Home = () => {
     }, [navigate]);
 
     const handleBookingClick = () => {
-        navigate("/booking");
+        const user = localStorage.getItem("user");
+        if (user) {
+            navigate("/booking");
+        } else {
+            navigate("/login", { state: { from: "/booking" } });
+        }
     };
 
     return (
@@ -57,7 +62,6 @@ const Home = () => {
                     <button className="secondary-button" onClick={handleBookingClick}>
                         Book Your Table Now
                     </button>
-
                 </div>
             </div>
         </div>

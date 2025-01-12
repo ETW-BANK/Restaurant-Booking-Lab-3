@@ -58,14 +58,23 @@ const BookingForm = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log("Booking created successfully:", response.data);
 
-     
-      window.location.href = "/"; 
+      console.log("Booking created successfully:", response.data);
+      alert("Booking Created Sucessfully")
+
+      window.location.href = "/booking-confirmation";
     } catch (error) {
-      console.error("Error creating booking:", error.response?.data || error.message);
+
+      if (error.response && error.response.data && error.response.data.includes("No available tables")) {
+        alert("Sorry, there are no available tables for the selected date and time. Please try a different time.");
+      } else {
+
+        alert("An error occurred while creating your booking. Please try again later.");
+        console.error("Error creating booking:", error.response?.data || error.message);
+      }
     }
   };
+
 
   return (
     <div className="formbold-main-wrapper">
