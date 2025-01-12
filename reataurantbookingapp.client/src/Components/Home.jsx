@@ -58,32 +58,6 @@ const Home = () => {
                         Book Your Table Now
                     </button>
 
-                
-                    {userInfo && (
-                        <div className="user-info">
-                            <p>
-                                <strong>Name:</strong> {userInfo.name}
-                            </p>
-                            <p>
-                                <strong>Email:</strong> {userInfo.email}
-                            </p>
-                            <p>
-                                <strong>Address:</strong> {userInfo.streetAddress}, {userInfo.city},{" "}
-                                {userInfo.state}, {userInfo.postalCode}
-                            </p>
-                            <p>
-                                <strong>Last Login:</strong>{" "}
-                                {userInfo.lastLogin
-                                    ? new Date(userInfo.lastLogin).toLocaleString()
-                                    : "No data available"}
-                            </p>
-                            <p>
-                                <strong>Role:</strong> {userInfo.role || "No Role Assigned"}
-                            </p>
-                        </div>
-                    )}
-
-                    {error && <p className="error-message">{error}</p>}
                 </div>
             </div>
         </div>

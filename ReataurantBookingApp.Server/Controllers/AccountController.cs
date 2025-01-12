@@ -103,29 +103,24 @@ namespace ReataurantBookingApp.Server.Controllers
                 return BadRequest(new { message = "Something went wrong, please try again. " + ex.Message });
             }
 
-            // Return the user ID along with the login success message
+          
             return Ok(new { message = message });
         }
 
-        [HttpGet("logout"), Authorize]
-
-        public async Task<ActionResult> LogoutUser()
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
         {
-            string message;
-
             try
             {
                 await _signInManager.SignOutAsync();
+                return Ok(new { message = "Logged out successfully" });
             }
             catch (Exception ex)
             {
-                return BadRequest("Somthing Went Wrong Please try Agin" + ex.Message);
+                return BadRequest(new { message = "Logout failed: " + ex.Message });
             }
-
-            message = "Signd Out Succcesfully";
-
-            return Ok(new { message = message });
         }
+
 
         [HttpGet("admin"), Authorize]
         public async Task<ActionResult> AdminPage()
