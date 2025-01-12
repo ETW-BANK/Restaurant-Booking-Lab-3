@@ -21,8 +21,8 @@ header {
     justify-content: space-between;
     height: 80px;
     padding: 0 2rem;
-    background-color: var(--mainColor);
-    color: var(--textColor);
+    background-color: rgba(239, 240, 223, 0.479);
+    color: lightgray
 }
 
 .App-logo{
@@ -136,6 +136,7 @@ nav {
     display: flex;
     gap: 20px;
     align-items: center;
+    
 }
 
 nav a {
@@ -152,8 +153,9 @@ nav a:hover {
 /* Login/Register icons */
 .nav-icons {
     display: flex;
-    gap: 15px;
+    gap: 30px;
     align-items: center;
+    padding: 20px;
 }
 
 .nav-icon {
@@ -162,8 +164,9 @@ nav a:hover {
     align-items: center;
     text-decoration: none;
     font-size: 1rem;
-    gap: 5px;
+    gap: 20px;
     transition: color 0.3s;
+    padding: 20px;
 }
 
 .nav-icon:hover {

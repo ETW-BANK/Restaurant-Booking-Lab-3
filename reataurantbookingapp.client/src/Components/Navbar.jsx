@@ -62,18 +62,18 @@ function Navbar() {
                     <FaTimes />
                 </button>
             </nav>
-            <div className="nav-icons">
+            <div className="nav-icons"  style={{ display: 'flex', gap: '20px', color: 'darkblue' }}>
                 {!isLoggedIn ? (
                     <>
-                        <Link to="/login" className="nav-icon">
+                        <Link to="/login" className="nav-icon"style={{ color: 'darkblue' }}>
                             <FaSignInAlt /> Login
                         </Link>
-                        <Link to="/register" className="nav-icon">
+                        <Link to="/register" className="nav-icon"style={{ color: 'darkblue' }}>
                             <FaUserPlus /> Register
                         </Link>
                     </>
                 ) : (
-                    <button className="nav-icon" onClick={handleLogout}>
+                    <button className="nav-icon" onClick={handleLogout}style={{ color: 'Red' }}>
                         <FaSignOutAlt /> Logout
                     </button>
                 )}
