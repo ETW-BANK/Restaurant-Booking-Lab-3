@@ -73,7 +73,7 @@ function Navbar() {
                         </Link>
                     </>
                 ) : (
-                    <button className="nav-icon" onClick={handleLogout}style={{ color: 'Red' }}>
+                    <button className="nav-icon" onClick={handleLogout}style={{ color: 'Red',backgroundColor:"transparent", border:"none", fontSize:"20px"}}>
                         <FaSignOutAlt /> Logout
                     </button>
                 )}

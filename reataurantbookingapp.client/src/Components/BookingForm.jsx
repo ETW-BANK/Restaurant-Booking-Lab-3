@@ -62,11 +62,12 @@ const BookingForm = () => {
       console.log("Booking created successfully:", response.data);
       alert("Booking Created Sucessfully")
 
-      window.location.href = "/booking-confirmation";
+      window.location.href = "/";
     } catch (error) {
 
       if (error.response && error.response.data && error.response.data.includes("No available tables")) {
         alert("Sorry, there are no available tables for the selected date and time. Please try a different time.");
+        window.location.href = "/";
       } else {
 
         alert("An error occurred while creating your booking. Please try again later.");
