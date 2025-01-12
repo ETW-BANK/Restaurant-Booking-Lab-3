@@ -9,7 +9,7 @@ const Home = () => {
     useEffect(() => {
         let user = null;
         try {
-            user = localStorage.getItem("user"); // Safely access localStorage
+            user = localStorage.getItem("user"); 
         } catch (e) {
             console.error("Error accessing localStorage:", e);
             setError("Unable to access localStorage. Please check your browser settings.");
@@ -17,7 +17,7 @@ const Home = () => {
         }
 
         if (!user) {
-            navigate("/login"); // Redirect to login if no user found
+            navigate("/"); 
             return;
         }
 
