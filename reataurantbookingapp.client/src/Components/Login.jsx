@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import Sidepic from '../assets/bg-hero.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const navigate = useNavigate(); // To programmatically navigate after login
 
     useEffect(() => {
         document.title = "Login";
@@ -12,6 +13,7 @@ const Login = () => {
         try {
             const user = localStorage.getItem("user");
             if (user) {
+                // Redirect if already logged in
                 document.location = "/";
             }
         } catch (error) {
@@ -19,13 +21,12 @@ const Login = () => {
         }
     }, []);
 
-
     const LoginHandler = async (e) => {
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
         const dataTosend = {};
-
+    
         formData.forEach((value, key) => {
             if (key === "email") {
                 dataTosend["Email"] = value;
@@ -33,13 +34,13 @@ const Login = () => {
                 dataTosend[key] = value;
             }
         });
-
+    
         if (dataTosend.Remember === "on") {
             dataTosend.Remember = true;
         }
-
+    
         setLoading(true);
-
+    
         try {
             const response = await fetch("https://localhost:7090/api/Account/login", {
                 method: "POST",
@@ -50,17 +51,32 @@ const Login = () => {
                     "Accept": "application/json",
                 },
             });
-
+    
             const data = await response.json();
             setLoading(false);
-
+    
+            console.log("Login Response Data:", data);  
+    
             if (response.ok) {
+                
+                const user = data.currentUser;
+                console.log("User ID:", user.id);  
+                console.log("User Roles:", user.roles); 
+                
                 try {
-                    localStorage.setItem("user", dataTosend.Email);
+                    localStorage.setItem("user", user.email);  
+                    localStorage.setItem("userId", user.id);  
+                    localStorage.setItem("roles", user.roles.join(','));  
                 } catch (error) {
                     console.error("Failed to set user in localStorage:", error);
                 }
-                document.location = "/";
+    
+               
+                if (user.roles.includes("Admin")) {
+                    navigate("/admin");
+                } else {
+                    navigate("/home"); 
+                }
             } else {
                 setError(data.message || "Something went wrong, please try again.");
             }
@@ -70,6 +86,7 @@ const Login = () => {
             console.error("Login Error:", error);
         }
     };
+    
 
     return (
         <div className="formbold-main-wrapper">

@@ -13,11 +13,12 @@ import CreateTable from "./Components/CreateTable";
 import "./App.css";
 
 
-const App = () => {
 
+
+const App = () => {
   const routes = useRoutes([
-    
-    { path: "/", element: <Home /> },
+    { path: "/", element: <Home /> }, // Home route
+    { path: "/home", element: <Home /> }, // Alternatively, you can keep /home
     { path: "/booking", element: <Booking /> },
     { path: "/booking-list", element: <BookingList /> },
     { path: "/user-list", element: <UserList /> },
@@ -25,10 +26,9 @@ const App = () => {
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/admin", element: <Admin /> },
-    {path:"/booking-status", element:<BookingStatus/>},
-    {path:"/create-table", element:<CreateTable/>}
+    { path: "/booking-status", element: <BookingStatus /> },
+    { path: "/create-table", element: <CreateTable /> }
   ]);
-
   return routes;
 };
 

@@ -93,18 +93,26 @@ namespace ReataurantBookingApp.Server.Controllers
                 user_.LastLogin = DateTime.Now;
                 var updateResult = await _userManager.UpdateAsync(user_);
 
-                message = "Login Sucessfull";
+                var roles = await _userManager.GetRolesAsync(user_);
+
+               
+                var response = new
+                {
+                    message = "Login successful",
+                    currentUser = new
+                    {
+                        id = user_.Id,
+                        email = user_.Email,
+                        roles = roles 
+                    }
+                };
+
+                return Ok(response);
             }
-
-
-
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Something went wrong, please try again. " + ex.Message });
+                return BadRequest(new { message = "Something went wrong", error = ex.Message });
             }
-
-          
-            return Ok(new { message = message });
         }
 
         [HttpGet("logout")]
@@ -204,6 +212,7 @@ namespace ReataurantBookingApp.Server.Controllers
                 if (result)
                 {
                     currentUser = await _signInManager.UserManager.GetUserAsync(principals);
+                   
                 }
                 else
                 {
@@ -217,9 +226,9 @@ namespace ReataurantBookingApp.Server.Controllers
             {
                 return BadRequest("Somthing Went Wrong" + ex.Message);
             }
-
+            var roles = await _signInManager.UserManager.GetRolesAsync(currentUser);
             message = "Logged in Succesfully";
-            return Ok(currentUser.Id);
+            return Ok(new { currentUser.Id ,roles});
         }
 
         [HttpGet("UserInfo")]
