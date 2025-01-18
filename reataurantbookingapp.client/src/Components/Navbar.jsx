@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import './Navbar.css';
-import { FaBars, FaTimes, FaSignInAlt, FaUserPlus, FaSignOutAlt } from 'react-icons/fa'; 
+import { FaBars, FaTimes, FaSignInAlt, FaUserPlus, FaSignOutAlt } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import Pic from '../assets/Logo.svg';
 
@@ -10,10 +10,10 @@ function Navbar() {
     const navRef = useRef();
     const navigate = useNavigate();
 
-   
+
     useEffect(() => {
         const user = localStorage.getItem('user');
-        setIsLoggedIn(!!user); 
+        setIsLoggedIn(!!user);
     }, []);
 
     const toggleNavbar = () => {
@@ -29,10 +29,10 @@ function Navbar() {
             const data = await response.json();
 
             if (response.ok) {
-                localStorage.removeItem("user"); 
-                setIsLoggedIn(false); 
-                alert(data.message); 
-                navigate("/"); 
+                localStorage.removeItem("user");
+                setIsLoggedIn(false);
+                alert(data.message);
+                navigate("/");
             } else {
                 console.error("Could not log out");
             }
@@ -42,38 +42,38 @@ function Navbar() {
     };
 
     const handleLoginSuccess = (user) => {
-       
-        localStorage.setItem('user', JSON.stringify(user)); 
-        setIsLoggedIn(true); 
-        navigate("/"); 
+
+        localStorage.setItem('user', JSON.stringify(user));
+        setIsLoggedIn(true);
+        navigate("/");
     };
 
     return (
         <header>
             <img src={Pic} alt="Logo" className="navbar-logo" />
             <nav ref={navRef} className={isOpen ? 'responsive_nav' : ''}>
-                 <Link to="/">Home</Link>
-<Link to="/booking">Booking</Link>
-<Link to="/user-list">User List</Link>
-<Link to="/booking-list">Booking List</Link>
-<Link to="/table-list">Table List</Link>
-<Link to="/admin">List Of Admins</Link> 
+                <Link to="/">Home</Link>
+                <Link to="/booking">Booking</Link>
+                <Link to="/user-list">User List</Link>
+                <Link to="/booking-list">Booking List</Link>
+                <Link to="/table-list">Table List</Link>
+                <Link to="/admin">List Of Admins</Link>
                 <button className="nav-close-btn" onClick={toggleNavbar}>
                     <FaTimes />
                 </button>
             </nav>
-            <div className="nav-icons"  style={{ display: 'flex', gap: '20px', color: 'darkblue' }}>
+            <div className="nav-icons" style={{ display: 'flex', gap: '20px', color: 'darkblue' }}>
                 {!isLoggedIn ? (
                     <>
-                        <Link to="/login" className="nav-icon"style={{ color: 'darkblue' }}>
+                        <Link to="/login" className="nav-icon" style={{ color: 'darkblue' }}>
                             <FaSignInAlt /> Login
                         </Link>
-                        <Link to="/register" className="nav-icon"style={{ color: 'darkblue' }}>
+                        <Link to="/register" className="nav-icon" style={{ color: 'darkblue' }}>
                             <FaUserPlus /> Register
                         </Link>
                     </>
                 ) : (
-                    <button className="nav-icon" onClick={handleLogout}style={{ color: 'Red',backgroundColor:"transparent", border:"none", fontSize:"20px"}}>
+                    <button className="nav-icon" onClick={handleLogout} style={{ color: 'Red', backgroundColor: "transparent", border: "none", fontSize: "20px" }}>
                         <FaSignOutAlt /> Logout
                     </button>
                 )}

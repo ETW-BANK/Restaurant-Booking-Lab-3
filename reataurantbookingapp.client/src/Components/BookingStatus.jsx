@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { Card, CardContent, CardHeader, Table, Box, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+
 import './BookingList.css';
 
 const BookingStatus = () => {
@@ -83,7 +83,7 @@ const BookingStatus = () => {
                             </thead>
                             <tbody>
                                 {bookings
-                                    .filter((booking) => booking.bookingStatus !== 0) // Exclude canceled bookings
+                                    .filter((booking) => booking.bookingStatus !== 0)
                                     .map((booking) => (
                                         <tr key={booking.bookingId}>
                                             <td>{booking.bookingId}</td>
