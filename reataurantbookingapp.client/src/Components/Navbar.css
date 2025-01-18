@@ -1,53 +1,46 @@
+/* Navbar.css */
 * {
-
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-
 }
 
 :root {
-
     --mainColor: #29335c;
     --mainColorLight: #5768aa6b;
     --secondaryColor: tomato;
     --textColor: white;
+    --blueBlack: #1a1a1a; /* Blue-black color for buttons */
 }
 
 header {
-
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 80px;
     padding: 0 2rem;
-    background-color: rgba(239, 240, 223, 0.479);
-    color: lightgray
+    background-color: rgba(204, 206, 87, 0.418);
+    color: lightgray;
 }
 
-.App-logo{
- width: 50px;
+.App-logo {
+    width: 50px;
     height: 50px;
     pointer-events: none;
 }
 
 nav a {
-
     margin: 0 1rem;
-    color: gold;
+    color: rgb(9, 23, 85);
     text-decoration: none;
     font-family: 'Times New Roman', Times, serif;
-
 }
 
 nav a:hover {
-
     color: var(--secondaryColor);
 }
 
-
 header .nav-btn {
-
     padding: 5px;
     cursor: pointer;
     background: transparent;
@@ -57,18 +50,18 @@ header .nav-btn {
     opacity: 0;
     font-size: 1.8rem;
 }
+
 nav .nav-close-btn {
-  visibility: hidden;
+    visibility: hidden;
 }
+
 @media screen and (max-width: 1024px) {
     header .nav-btn {
         visibility: visible;
         opacity: 1;
         position: absolute;
         top: 1rem;
-      
         right: 2rem;
-       
     }
 
     header nav {
@@ -82,19 +75,13 @@ nav .nav-close-btn {
         align-items: center;
         justify-content: center;
         gap: 1.5rem;
-        background-color:  #a9b5e249;;
+        background-color: #15151649;
         transition: 1s;
         transform: translateY(-100vh);
-        
-     
     }
 
     header .responsive_nav {
         transform: none;
-       
-      
-       
-     
     }
 
     nav .nav-close-btn {
@@ -102,119 +89,135 @@ nav .nav-close-btn {
         position: absolute;
         top: 2rem;
         right: 6rem;
-       
     }
-
-
 
     nav a {
         font-size: 1.5rem;
-
     }
 
     img {
-        width: 50px; 
+        width: 50px;
         height: auto;
         display: inline-block;
     }
+
     /* General styles */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #333;
-    color: #fff;
-}
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+    }
 
-.navbar-logo {
-    height: 50px;
-}
+    .navbar-logo {
+        height: 50px;
+    }
 
-/* Navbar links */
-nav {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.3s;
-}
-
-nav a:hover {
-    color: #00aced;
-}
-
-/* Login/Register icons */
-.nav-icons {
-    display: flex;
-    gap: 30px;
-    align-items: center;
-    padding: 20px;
-}
-
-.nav-icon {
-    color: white;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    font-size: 1rem;
-    gap: 20px;
-    transition: color 0.3s;
-    padding: 20px;
-}
-
-.nav-icon:hover {
-    color: #00aced;
-}
-
-/* Responsive navbar */
-.nav-btn, .nav-close-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-.responsive_nav {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    background-color: #333;
-    width: 100%;
-    padding: 20px;
-}
-
-.nav-btn {
-    display: none;
-}
-
-@media (max-width: 768px) {
+    /* Navbar links */
     nav {
-        display: none;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: color 0.3s;
+    }
+
+    nav a:hover {
+        color: #642331;
+    }
+
+    /* Login/Register icons */
+    .nav-icons {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .nav-icon {
+        color: white;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        font-size: 1rem;
+        gap: 20px;
+        transition: color 0.3s;
+        padding: 20px;
+    }
+
+    .nav-icon:hover {
+        color: #17df17;
+    }
+
+   
+    .nav-btn, .nav-close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
     }
 
     .responsive_nav {
         display: flex;
+        flex-direction: column;
+        gap: 15px;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: #333;
+        width: 100%;
+        padding: 20px;
     }
 
     .nav-btn {
-        display: block;
+        display: none;
     }
 
-    .nav-icons {
-        margin-top: 10px;
-        justify-content: center;
+    @media (max-width: 768px) {
+        nav {
+            display: none;
+        }
+
+        .responsive_nav {
+            display: flex;
+        }
+
+        .nav-btn {
+            display: block;
+        }
+
+        .nav-icons {
+            margin-top: 10px;
+            justify-content: center;
+        }
     }
 }
 
+
+@media (min-width: 768px) {
+    .nav-icon {
+        color: var(--blueBlack); 
+    }
+
+    .nav-icon:hover {
+        color: #58e218;
+    }
+
+    
+    .nav-icon {
+        font-weight: bold;
+        transition: color 0.3s ease-in-out;
+    }
+
+    .nav-btn, .nav-close-btn {
+        color: white; 
+    }
 }

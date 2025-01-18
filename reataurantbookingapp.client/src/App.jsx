@@ -10,15 +10,14 @@ import Register from './Components/Regisetr';
 import Admin from './Components/Admin';
 import BookingStatus from "./Components/BookingStatus";
 import CreateTable from "./Components/CreateTable";
+import Logout from './Components/Logout';
+import Navbar from './Components/Navbar'; // Import Navbar
 import "./App.css";
-
-
-
 
 const App = () => {
   const routes = useRoutes([
-    { path: "/", element: <Home /> }, // Home route
-    { path: "/home", element: <Home /> }, // Alternatively, you can keep /home
+    { path: "/", element: <Home /> },
+    { path: "/home", element: <Home /> },
     { path: "/booking", element: <Booking /> },
     { path: "/booking-list", element: <BookingList /> },
     { path: "/user-list", element: <UserList /> },
@@ -27,9 +26,17 @@ const App = () => {
     { path: "/register", element: <Register /> },
     { path: "/admin", element: <Admin /> },
     { path: "/booking-status", element: <BookingStatus /> },
-    { path: "/create-table", element: <CreateTable /> }
+    { path: "/create-table", element: <CreateTable /> },
+    { path: "/logout", element: <Logout /> }
   ]);
-  return routes;
+
+  return (
+    <>
+      {/* Render Navbar only once */}
+      <Navbar />
+      {routes} {/* Render routes here */}
+    </>
+  );
 };
 
 export default App;

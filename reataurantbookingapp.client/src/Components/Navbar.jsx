@@ -1,88 +1,68 @@
-import { useRef, useState, useEffect } from 'react';
-import './Navbar.css';
-import { FaBars, FaTimes, FaSignInAlt, FaUserPlus, FaSignOutAlt } from 'react-icons/fa';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaBars, FaTimes, FaSignInAlt, FaUserPlus, FaSignOutAlt } from 'react-icons/fa';
+import './Navbar.css';
 import Pic from '../assets/Logo.svg';
 
-function Navbar() {
+const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const navRef = useRef();
     const navigate = useNavigate();
 
+    const user = localStorage.getItem("user");
+    const roles = localStorage.getItem("roles");
+    const isLoggedIn = user !== null;
+    const isAdmin = roles && roles.split(',').includes('Admin');
 
-    useEffect(() => {
-        const user = localStorage.getItem('user');
-        setIsLoggedIn(!!user);
-    }, []);
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("roles");
+        localStorage.removeItem("userId");
+        navigate("/home");
+    };
 
     const toggleNavbar = () => {
         setIsOpen(!isOpen);
     };
 
-    const handleLogout = async () => {
-        try {
-            const response = await fetch("https://localhost:7090/api/Account/logout", {
-                method: "GET",
-                credentials: "include"
-            });
-            const data = await response.json();
-
-            if (response.ok) {
-                localStorage.removeItem("user");
-                setIsLoggedIn(false);
-                alert(data.message);
-                navigate("/");
-            } else {
-                console.error("Could not log out");
-            }
-        } catch (error) {
-            console.error("Error during logout:", error);
-        }
-    };
-
-    const handleLoginSuccess = (user) => {
-
-        localStorage.setItem('user', JSON.stringify(user));
-        setIsLoggedIn(true);
-        navigate("/");
-    };
-
     return (
         <header>
             <img src={Pic} alt="Logo" className="navbar-logo" />
-            <nav ref={navRef} className={isOpen ? 'responsive_nav' : ''}>
-                <Link to="/">Home</Link>
-                <Link to="/booking">Booking</Link>
-                <Link to="/user-list">User List</Link>
-                <Link to="/booking-list">Booking List</Link>
-                <Link to="/table-list">Table List</Link>
-                <Link to="/admin">List Of Admins</Link>
+            <nav className={isOpen ? 'responsive_nav' : ''}>
+                <Link to="/home">Home</Link>
+
+                {isLoggedIn && isAdmin && (
+                    <>
+                        <Link to="/user-list">User List</Link>
+                        <Link to="/admin">Admin</Link>
+                        <Link to="/booking-list">Booking List</Link>
+                        <Link to="/create-table">Create Table</Link>
+                    </>
+                )}
+
+                {isLoggedIn ? (
+                    <button className="nav-icon" onClick={handleLogout} style={{ color: 'Red', backgroundColor: "transparent", border: "none", fontSize: "16px" }}>
+                        <FaSignOutAlt /> Logout
+                    </button>
+                ) : (
+                    <>
+                        <Link to="/login" className="nav-icon">
+                            <FaSignInAlt /> Login
+                        </Link>
+                        <Link to="/register" className="nav-icon">
+                            <FaUserPlus /> Register
+                        </Link>
+                    </>
+                )}
+
                 <button className="nav-close-btn" onClick={toggleNavbar}>
                     <FaTimes />
                 </button>
             </nav>
-            <div className="nav-icons" style={{ display: 'flex', gap: '20px', color: 'darkblue' }}>
-                {!isLoggedIn ? (
-                    <>
-                        <Link to="/login" className="nav-icon" style={{ color: 'darkblue' }}>
-                            <FaSignInAlt /> Login
-                        </Link>
-                        <Link to="/register" className="nav-icon" style={{ color: 'darkblue' }}>
-                            <FaUserPlus /> Register
-                        </Link>
-                    </>
-                ) : (
-                    <button className="nav-icon" onClick={handleLogout} style={{ color: 'Red', backgroundColor: "transparent", border: "none", fontSize: "20px" }}>
-                        <FaSignOutAlt /> Logout
-                    </button>
-                )}
-            </div>
             <button className="nav-btn" onClick={toggleNavbar}>
                 {isOpen ? <FaTimes /> : <FaBars />}
             </button>
         </header>
     );
-}
+};
 
 export default Navbar;
