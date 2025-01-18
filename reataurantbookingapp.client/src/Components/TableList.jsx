@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, CardContent, CardHeader, Table, Box } from '@mui/material';
+import { Card, CardContent, CardHeader, Table, Box, Button } from '@mui/material';
+import { Link } from 'react-router-dom'; // Import Link for navigation
 import './BookingList.css';
 
 const TableList = () => {
@@ -23,7 +24,22 @@ const TableList = () => {
   return (
     <Box className="booking-list-container">
       <Card className="booking-card">
-        <CardHeader title="Table List" className="booking-card-header" />
+        <CardHeader 
+          title="Table List" 
+          className="booking-card-header" 
+          action={
+            <Link to="/create-table" style={{ textDecoration: 'none' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ marginRight: '16px' }}
+              >
+                Create Table
+              </Button>
+            </Link>
+          }
+        />
+        
         <CardContent>
           <Table className="booking-table">
             <thead>

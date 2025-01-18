@@ -9,6 +9,7 @@ import Login from './Components/Login';
 import Register from './Components/Regisetr';
 import Admin from './Components/Admin';
 import BookingStatus from "./Components/BookingStatus";
+import CreateTable from "./Components/CreateTable";
 import "./App.css";
 
 
@@ -24,7 +25,8 @@ const App = () => {
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/admin", element: <Admin /> },
-    {path:"/booking-status", element:<BookingStatus/>}
+    {path:"/booking-status", element:<BookingStatus/>},
+    {path:"/create-table", element:<CreateTable/>}
   ]);
 
   return routes;

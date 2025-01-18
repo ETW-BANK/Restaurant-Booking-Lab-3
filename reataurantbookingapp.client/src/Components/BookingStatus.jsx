@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import { Card, CardContent, CardHeader, Table, Box, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 import './BookingList.css';
 
 const BookingStatus = () => {
@@ -54,64 +56,63 @@ const BookingStatus = () => {
     };
 
     return (
-        <div className="booking-status">
-            <h1 style={{ textAlign: "center", marginBottom: "20px", color: "#4CAF50" }}>My Bookings</h1>
-            {isLoading ? (
-                <p>Loading your bookings...</p>
-            ) : bookings.length === 0 ? (
-                <p style={{ textAlign: "center", color: "red" }}>No bookings found for your account.</p>
-            ) : (
-                <div className="booking-table">
-                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                        <thead>
-                            <tr style={{ backgroundColor: "#f4f4f4", borderBottom: "2px solid #ccc" }}>
-                                <th style={{ padding: "10px", textAlign: "left" }}>Booking ID</th>
-                                <th style={{ padding: "10px", textAlign: "left" }}>Date</th>
-                                <th style={{ padding: "10px", textAlign: "left" }}>Time</th>
-                                <th style={{ padding: "10px", textAlign: "left" }}>Guests</th>
-                                <th style={{ padding: "10px", textAlign: "left" }}>Table No.</th>
-                                <th style={{ padding: "10px", textAlign: "left" }}>Status</th>
-                                <th style={{ padding: "10px", textAlign: "center" }}>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {bookings
-                                .filter((booking) => booking.bookingStatus !== 0) // Exclude canceled bookings
-                                .map((booking) => (
-                                    <tr key={booking.bookingId} style={{ borderBottom: "1px solid #ddd" }}>
-                                        <td style={{ padding: "10px" }}>{booking.bookingId}</td>
-                                        <td style={{ padding: "10px" }}>{booking.bookingDate}</td>
-                                        <td style={{ padding: "10px" }}>{booking.bookingTime}</td>
-                                        <td style={{ padding: "10px" }}>{booking.numberOfGuests}</td>
-                                        <td style={{ padding: "10px" }}>{booking.tableNumber}</td>
-                                        <td style={{ padding: "10px" }}>
-                                            {booking.bookingStatus === 0 ? "Cancelled" : "Active"}
-                                        </td>
-                                        <td style={{ padding: "10px" }}>
-                                            {booking.bookingStatus !== 0 && (
-                                                <button
-                                                    onClick={() => cancelBooking(booking.bookingId)}
-                                                    style={{
-                                                        backgroundColor: "red",
-                                                        color: "white",
-                                                        border: "none",
-                                                        padding: "5px 10px",
-                                                        cursor: "pointer",
-                                                        borderRadius: "5px",
-                                                    }}
-                                                >
-                                                    Cancel
-                                                </button>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
-                        </tbody>
-
-                    </table>
-                </div>
-            )}
-        </div>
+        <Box className="booking-list-container">
+            <Card className="booking-card">
+                <CardHeader
+                    title="My Bookings"
+                    className="booking-card-header" />
+                <CardContent>
+                    {isLoading ? (
+                        <p>Loading your bookings...</p>
+                    ) : bookings.length === 0 ? (
+                        <p style={{ textAlign: "center", color: "red" }}>
+                            No bookings found for your account.
+                        </p>
+                    ) : (
+                        <Table className="booking-table">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Guests</th>
+                                    <th>Table No.</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {bookings
+                                    .filter((booking) => booking.bookingStatus !== 0) // Exclude canceled bookings
+                                    .map((booking) => (
+                                        <tr key={booking.bookingId}>
+                                            <td>{booking.bookingId}</td>
+                                            <td>{booking.bookingDate}</td>
+                                            <td>{booking.bookingTime}</td>
+                                            <td>{booking.numberOfGuests}</td>
+                                            <td>{booking.tableNumber}</td>
+                                            <td>
+                                                {booking.bookingStatus === 0 ? "Cancelled" : "Active"}
+                                            </td>
+                                            <td>
+                                                {booking.bookingStatus !== 0 && (
+                                                    <Button
+                                                        onClick={() => cancelBooking(booking.bookingId)}
+                                                        variant="contained"
+                                                        color="secondary"
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                            </tbody>
+                        </Table>
+                    )}
+                </CardContent>
+            </Card>
+        </Box>
     );
 };
 

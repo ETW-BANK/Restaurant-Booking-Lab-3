@@ -52,12 +52,12 @@ function Navbar() {
         <header>
             <img src={Pic} alt="Logo" className="navbar-logo" />
             <nav ref={navRef} className={isOpen ? 'responsive_nav' : ''}>
-                {/* <Link to="/">Home</Link>
+                 <Link to="/">Home</Link>
 <Link to="/booking">Booking</Link>
 <Link to="/user-list">User List</Link>
 <Link to="/booking-list">Booking List</Link>
 <Link to="/table-list">Table List</Link>
-<Link to="/admin">List Of Admins</Link> */}
+<Link to="/admin">List Of Admins</Link> 
                 <button className="nav-close-btn" onClick={toggleNavbar}>
                     <FaTimes />
                 </button>
