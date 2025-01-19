@@ -62,7 +62,7 @@ const Navbar = () => {
                         <Link to="/user-list">User List</Link>
                         <Link to="/admin">Admin</Link>
                         <Link to="/booking-list">Booking List</Link>
-                        <Link to="/create-table">Create Table</Link>
+                        <Link to="/table-list">Table List</Link>
                     </>
                 )}
 
