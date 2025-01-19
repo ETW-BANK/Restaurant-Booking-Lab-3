@@ -1,49 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import Sidepic from '../assets/bg-hero.jpg';
+import React, { useState, useEffect } from 'react';
+import Sidepic from '../assets/bg-hero.jpg'; 
 
 const Register = () => {
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        try {
-            
-           
-            localStorage.clear();
+    
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        phoneNumber: '',
+        streetAddress: '',
+        city: '',
+        postalCode: '',
+        state: '',
+        id: '0', 
+    });
 
-            const user = localStorage.getItem("user");
-            if (user) {
-                document.location = "/";
-            }
-        } catch (error) {
-            console.error("LocalStorage access denied:", error);
-        }
+    
+    useEffect(() => {
+        localStorage.clear();
+        sessionStorage.clear();
     }, []);
+
+  
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
 
     const RegisterHandler = async (e) => {
         e.preventDefault();
-        const form = e.target;
-        const formData = new FormData(form);
-        const dataTosend = {};
-
-        formData.forEach((value, key) => {
-            dataTosend[key] = value;
-        });
-
-        // Clean up the user's name
-        const formattedName = dataTosend.name.trim().replace(/\s+/g, "");
-        dataTosend.name = formattedName;
-
-        // Add a default ID if not provided
-        if (!dataTosend.id) {
-            dataTosend.id = "0";
-        }
-
         setLoading(true);
+
+        console.log(formData); 
+
         try {
             const response = await fetch("https://localhost:7090/api/Account/register", {
                 method: "POST",
                 credentials: "include",
-                body: JSON.stringify(dataTosend),
+                body: JSON.stringify(formData),
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
@@ -54,7 +53,13 @@ const Register = () => {
             setLoading(false);
 
             if (response.ok) {
-                document.location = "/login";
+                
+                
+                localStorage.setItem("user", JSON.stringify(data.user)); 
+                localStorage.setItem("token", data.token); 
+
+                
+                window.location.href = "/home"; 
             } else {
                 const messageEl = document.querySelector(".message");
                 messageEl.innerHTML = data.message || "Something went wrong, please try again.";
@@ -78,87 +83,128 @@ const Register = () => {
                         <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#4CAF50" }}>
                             Register Here
                         </h2>
-                        <form onSubmit={RegisterHandler}>
-                            <input type="hidden" name="id" id="id" value="0" />
+                        <form onSubmit={RegisterHandler} autoComplete="off">
+                            <div className="flex">
+                                <div className="formbold-mb-5 sm:w-half">
+                                    <label htmlFor="name" className="formbold-form-label">Name</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        id="name"
+                                        value={formData.name}
+                                        placeholder="Enter Your Name"
+                                        className="formbold-form-input"
+                                        required
+                                        onChange={handleChange}
+                                        autoComplete="off"
+                                    />
+                                </div>
 
-                            <div className="formbold-mb-5">
-                                <label htmlFor="name" className="formbold-form-label">Name</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    id="name"
-                                    placeholder="Enter Your Name"
-                                    className="formbold-form-input"
-                                    required
-                                />
+                                <div className="formbold-mb-5 sm:w-half">
+                                    <label htmlFor="email" className="formbold-form-label">Email</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        id="email"
+                                        value={formData.email}
+                                        placeholder="Enter Your Email"
+                                        className="formbold-form-input"
+                                        required
+                                        onChange={handleChange}
+                                        autoComplete="off"
+                                    />
+                                </div>
                             </div>
 
-                            <div className="formbold-mb-5">
-                                <label htmlFor="email" className="formbold-form-label">Email</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    placeholder="Enter Your Email"
-                                    className="formbold-form-input"
-                                    required
-                                />
+                            <div className="flex">
+                                <div className="formbold-mb-5 sm:w-half">
+                                    <label htmlFor="password" className="formbold-form-label">Password</label>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        id="password"
+                                        value={formData.password}
+                                        placeholder="Enter Your Password"
+                                        className="formbold-form-input"
+                                        required
+                                        onChange={handleChange}
+                                        autoComplete="new-password"
+                                    />
+                                </div>
+
+                                <div className="formbold-mb-5 sm:w-half">
+                                    <label htmlFor="phoneNumber" className="formbold-form-label">Phone Number</label>
+                                    <input
+                                        type="text"
+                                        name="phoneNumber"
+                                        id="phoneNumber"
+                                        value={formData.phoneNumber}
+                                        placeholder="Enter Your Phone Number"
+                                        className="formbold-form-input"
+                                        onChange={handleChange}
+                                        autoComplete="off"
+                                    />
+                                </div>
                             </div>
 
-                            <div className="formbold-mb-5">
-                                <label htmlFor="password" className="formbold-form-label">Password</label>
-                                <input
-                                    type="password"
-                                    name="password"
-                                    id="password"
-                                    placeholder="Enter Your Password"
-                                    className="formbold-form-input"
-                                    required
-                                />
+                            <div className="flex">
+                                <div className="formbold-mb-5 sm:w-half">
+                                    <label htmlFor="streetAddress" className="formbold-form-label">Address</label>
+                                    <input
+                                        type="text"
+                                        name="streetAddress"
+                                        id="streetAddress"
+                                        value={formData.streetAddress}
+                                        placeholder="Enter Your Street Address"
+                                        className="formbold-form-input"
+                                        onChange={handleChange}
+                                        autoComplete="off"
+                                    />
+                                </div>
+
+                                <div className="formbold-mb-5 sm:w-half">
+                                    <label htmlFor="city" className="formbold-form-label">City</label>
+                                    <input
+                                        type="text"
+                                        name="city"
+                                        id="city"
+                                        value={formData.city}
+                                        placeholder="Enter Your City"
+                                        className="formbold-form-input"
+                                        onChange={handleChange}
+                                        autoComplete="off"
+                                    />
+                                </div>
                             </div>
 
-                            <div className="formbold-mb-5">
-                                <label htmlFor="streetAddress" className="formbold-form-label">Address</label>
-                                <input
-                                    type="text"
-                                    name="streetAddress"
-                                    id="streetAddress"
-                                    placeholder="Enter Your Street Address"
-                                    className="formbold-form-input"
-                                />
-                            </div>
+                            <div className="flex">
+                                <div className="formbold-mb-5 sm:w-half">
+                                    <label htmlFor="postalCode" className="formbold-form-label">Postal Code</label>
+                                    <input
+                                        type="text"
+                                        name="postalCode"
+                                        id="postalCode"
+                                        value={formData.postalCode}
+                                        placeholder="Enter Your Postal Code"
+                                        className="formbold-form-input"
+                                        onChange={handleChange}
+                                        autoComplete="off"
+                                    />
+                                </div>
 
-                            <div className="formbold-mb-5">
-                                <label htmlFor="city" className="formbold-form-label">City</label>
-                                <input
-                                    type="text"
-                                    name="city"
-                                    id="city"
-                                    placeholder="Enter Your City"
-                                    className="formbold-form-input"
-                                />
-                            </div>
-
-                            <div className="formbold-mb-5">
-                                <label htmlFor="postalCode" className="formbold-form-label">Postal Code</label>
-                                <input
-                                    type="text"
-                                    name="postalCode"
-                                    id="postalCode"
-                                    placeholder="Enter Your Postal Code"
-                                    className="formbold-form-input"
-                                />
-                            </div>
-
-                            <div className="formbold-mb-5">
-                                <label htmlFor="phoneNumber" className="formbold-form-label">Phone Number</label>
-                                <input
-                                    type="text"
-                                    name="phoneNumber"
-                                    id="phoneNumber"
-                                    placeholder="Enter Your Phone Number"
-                                    className="formbold-form-input"
-                                />
+                                <div className="formbold-mb-5 sm:w-half">
+                                    <label htmlFor="state" className="formbold-form-label">State</label>
+                                    <input
+                                        type="text"
+                                        name="state"
+                                        id="state"
+                                        value={formData.state}
+                                        placeholder="Enter Your State"
+                                        className="formbold-form-input"
+                                        onChange={handleChange}
+                                        autoComplete="off"
+                                    />
+                                </div>
                             </div>
 
                             <div>

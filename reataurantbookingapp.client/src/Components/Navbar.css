@@ -5,15 +5,15 @@
     box-sizing: border-box;
 }
 
-/* Root variables for colors */
+
 :root {
     --mainColor: #24305f;
     --secondaryColor: tomato;
     --textColor: white;
-    --blueBlack: #1a1a1a; /* Blue-black color for buttons */
+    --blueBlack: #1a1a1a; 
 }
 
-/* Header Layout */
+
 header {
     display: flex;
     align-items: center;
@@ -29,13 +29,13 @@ header {
     justify-content: flex-end;
 }
 
-/* Logo Style */
+
 .navbar-logo {
     width: 50px;
     height: 50px;
 }
 
-/* Navbar Links */
+
 nav {
     display: flex;
     gap: 20px;
@@ -56,7 +56,7 @@ nav a:hover {
     color: var(--secondaryColor);
 }
 
-/* Navbar Button */
+
 .nav-btn {
     background: none;
     border: none;
@@ -71,7 +71,7 @@ nav a:hover {
     visibility: hidden;
 }
 
-/* Navbar Icons */
+
 .nav-icons {
     display: flex;
     gap: 10px;
@@ -80,9 +80,9 @@ nav a:hover {
     
 }
 
-/* Mobile responsive styles */
+
 @media screen and (max-width: 1024px) {
-    /* Show hamburger icon on small screens */
+   
     header .nav-btn {
         visibility: visible;
         opacity: 1;
@@ -91,7 +91,7 @@ nav a:hover {
         right: 2rem;
     }
 
-    /* Navbar Links for Mobile (ensure it stacks vertically) */
+    
     header nav {
         position: fixed;
         top: 0;
@@ -99,18 +99,21 @@ nav a:hover {
         height: 100%;
         width: 100%;
         display: flex;
-        flex-direction: column; /* Stack links vertically */
+        flex-direction: column; 
         align-items: center;
         justify-content: center;
         gap: 1.5rem;
-        background-color: #1e1e9293;
+        background-color: #14234e5d;
         transition: transform 1s;
-        transform: translateY(-100vh); /* Hide initially */
+        transform: translateY(-100vh); 
+        height: fit-content;
+        top: 80px;
+        
     }
 
-    /* When responsive_nav class is active, show navbar */
+  
     header .responsive_nav {
-        transform: translateY(0); /* Show when the menu is open */
+        transform: translateY(0); 
     }
 
     nav .nav-close-btn {
@@ -137,13 +140,13 @@ nav a:hover {
    
 }
 
-/* General Styles for Navbar Links */
+
 @media screen and (min-width: 1024px) {
     .navbar-links-container {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        flex-direction: row; /* Links in a row for large screens */
+        flex-direction: row; 
         gap: 20px;
         
     }
@@ -182,7 +185,7 @@ nav a:hover {
         color: white;
     }
 
-    /* Align the navbar and make it responsive for larger screens */
+   
     header {
         display: flex;
         justify-content: space-between;
@@ -193,9 +196,8 @@ nav a:hover {
     }
 }
 
-/* Navbar icons */
 .nav-icon {
-    color: rgb(87, 46, 13);
+    color: rgb(17, 235, 17);
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -209,7 +211,7 @@ nav a:hover {
     color: #17df17;
 }
 
-/* Responsive Navbar for Smaller Screens */
+
 @media screen and (max-width: 768px) {
     nav {
         display: none;
@@ -217,12 +219,12 @@ nav a:hover {
 
     .responsive_nav {
         display: flex;
-        flex-direction: column; /* Ensure links are stacked vertically */
+        flex-direction: column; 
         gap: 20px;
         position: absolute;
         top: 80px;
         left: 0;
-        background-color: #c291286c;
+        background-color: #14234e5d;
         width: 100%;
         padding: 20px;
         height: fit-content;

@@ -13,7 +13,7 @@ const TableList = () => {
     const GetData = async () => {
       try {
         const result = await axios.get('https://localhost:7090/api/Table/GetAllTables');
-        console.log('API Response:', result.data);  
+        console.log('API Response:', result.data);
         setData(result.data); // Set the fetched data into state
       } catch (error) {
         console.error('Error fetching Tables:', error);
@@ -27,9 +27,8 @@ const TableList = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`https://localhost:7090/api/Table/DeleteTable/${id}`);
-      console.log(response.data); 
+      console.log(response.data);
 
-      
       setData((prevData) => prevData.filter(table => table.id !== id));
 
       alert('Table Deleted Successfully');
@@ -42,9 +41,9 @@ const TableList = () => {
   return (
     <Box className="booking-list-container">
       <Card className="booking-card">
-        <CardHeader 
-          title="Table List" 
-          className="booking-card-header" 
+        <CardHeader
+          title="Table List"
+          className="booking-card-header"
           action={
             <Link to="/create-table" style={{ textDecoration: 'none' }}>
               <Button
@@ -57,47 +56,49 @@ const TableList = () => {
             </Link>
           }
         />
-        
+
         <CardContent>
-          <Table className="booking-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Table ID</th>
-                <th>Table Number</th>
-                <th>Seats</th>
-                <th>Available</th>
-                <th>Actions</th> 
-              </tr>
-            </thead>
-            <tbody>
-              {data.length > 0 ? (
-                data.map((table, index) => (
-                  <tr key={table.id}>
-                    <td>{index + 1}</td>
-                    <td>{table.id}</td>
-                    <td>{table.tableNumber}</td>
-                    <td>{table.numberOfSeats}</td>
-                    <td>{table.isAvailable ? 'Yes' : 'No'}</td>
-                    <td>
-                      <IconButton 
-                        color="secondary" 
-                        onClick={() => handleDelete(table.id)} 
-                      >
-                        <FaTrash />
-                      </IconButton>
+          <div className="booking-table-container">
+            <Table className="booking-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Table ID</th>
+                  <th>Table Number</th>
+                  <th>Seats</th>
+                  <th>Available</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.length > 0 ? (
+                  data.map((table, index) => (
+                    <tr key={table.id}>
+                      <td data-label="#"> {index + 1} </td>
+                      <td data-label="Table ID"> {table.id} </td>
+                      <td data-label="Table Number"> {table.tableNumber} </td>
+                      <td data-label="Seats"> {table.numberOfSeats} </td>
+                      <td data-label="Available"> {table.isAvailable ? 'Yes' : 'No'} </td>
+                      <td data-label="Actions">
+                        <IconButton
+                          color="secondary"
+                          onClick={() => handleDelete(table.id)}
+                        >
+                          <FaTrash />
+                        </IconButton>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center">
+                      No tables available
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="text-center">
-                    No tables available
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
+                )}
+              </tbody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </Box>

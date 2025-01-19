@@ -43,17 +43,17 @@ const Navbar = () => {
 
     return (
         <header>
-            {/* Logo */}
+           
             <div className="navbar-logo-container">
                 <img src={Pic} alt="Logo" className="navbar-logo" />
             </div>
 
-            {/* Hamburger Button */}
+
             <button className="nav-btn" onClick={toggleNavbar}>
                 {isOpen ? <FaTimes /> : <FaBars />}
             </button>
 
-            {/* Navbar Links */}
+
             <nav className={`navbar-links-container ${isOpen ? 'responsive_nav' : ''}`}>
 
                 <Link to="/home">Home</Link>

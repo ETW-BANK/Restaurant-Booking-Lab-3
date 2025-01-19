@@ -40,28 +40,29 @@ const BookingList = () => {
               </tr>
             </thead>
             <tbody>
-              {data.length > 0 ? (
-                data.map((booking, index) => (
-                  <tr key={booking.bookingId}>
-                    <td>{index + 1}</td>
-                    <td>{booking.bookingDate}</td>
-                    <td>{booking.bookingTime}</td>
-                    <td>{booking.numberOfGuests}</td>
-                    <td>{booking.name}</td>
-                    <td>{booking.email}</td>
-                    <td>{booking.phone || 'N/A'}</td>
-                    <td>{booking.tableNumber}</td>
-                    <td>{booking.bookingStatus === 0 ? "Cancelled" : "Active"}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="9" className="text-center">
-                    No bookings available
-                  </td>
-                </tr>
-              )}
-            </tbody>
+  {data.length > 0 ? (
+    data.map((booking, index) => (
+      <tr key={booking.bookingId}>
+        <td data-label="#"> {index + 1} </td>
+        <td data-label="Booking Date"> {booking.bookingDate} </td>
+        <td data-label="Booking Time"> {booking.bookingTime} </td>
+        <td data-label="Guests"> {booking.numberOfGuests} </td>
+        <td data-label="Customer Name"> {booking.name} </td>
+        <td data-label="Email"> {booking.email} </td>
+        <td data-label="Phone"> {booking.phone || 'N/A'} </td>
+        <td data-label="Table Number"> {booking.tableNumber} </td>
+        <td data-label="Status"> {booking.bookingStatus === 0 ? "Cancelled" : "Active"} </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="9" className="text-center">
+        No bookings available
+      </td>
+    </tr>
+  )}
+</tbody>
+
           </Table>
         </CardContent>
       </Card>

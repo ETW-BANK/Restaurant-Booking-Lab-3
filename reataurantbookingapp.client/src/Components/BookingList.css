@@ -1,76 +1,112 @@
-/* BookingList.css */
-
-/* Container that centers the table */
 .booking-list-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%; 
+}
+
+.booking-card {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto; 
+}
+
+.booking-card-header {
+  background-color: #4caf50;
+  color: white;
+}
+
+.booking-table-container {
+  overflow-x: auto; 
+}
+
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; 
+}
+
+.booking-table th, .booking-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+  word-wrap: break-word; 
+}
+
+.booking-table th {
+  background-color: #f4f4f4;
+}
+
+.booking-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.booking-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.text-center {
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .booking-table th, .booking-table td {
+    padding: 10px;
+    font-size: 14px; 
   }
-  
-  /* Card Styling */
+
   .booking-card {
-    width: 100%;
-    max-width: 1200px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Light shadow for card */
-    border-radius: 8px;
+    margin: 0 10px; 
   }
-  
-  /* Card Header Styling */
-  .booking-card-header {
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  /* Table Styling */
+
   .booking-table {
-    width: 100%;
-    border-collapse: collapse;
+    font-size: 14px; 
   }
+}
+
+@media (max-width: 480px) {
+  .booking-table th, .booking-table td {
+    padding: 8px; 
+    font-size: 12px; 
+  }
+
+  .booking-card {
+    margin: 0 5px;
+  }
+
+  .booking-table {
+    font-size: 12px; 
+  }
+
   
-  .booking-table th,
+  .booking-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; 
+  }
+
+  
+  .booking-table thead {
+    display: none; 
+  }
+
+  .booking-table tr {
+    display: block;
+    margin-bottom: 10px;
+  }
+
   .booking-table td {
-    text-align: center;
-    padding: 12px 15px;
-    border: 1px solid #ddd; /* subtle borders */
-    font-size: 16px;
+    display: block;
+    text-align: right;
+    position: relative;
+    padding-left: 50%;
   }
-  
-  .booking-table th {
-    background-color: #1976d2; /* Primary theme color */
-    color: white;
+
+  .booking-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    top: 10px;
     font-weight: bold;
+    text-transform: uppercase;
   }
-  
-  .booking-table tr:nth-child(even) {
-    background-color: #f5f5f5; /* Light hover color */
-  }
-  
-  .booking-table tr:hover {
-    background-color: #cce7ff; /* Darker hover effect */
-  }
-  
-  .booking-table td {
-    color: #333; /* Text color */
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 600px) {
-    .booking-list-container {
-      padding: 10px;
-    }
-  
-    .booking-card {
-      width: 100%;
-    }
-  
-    .booking-table th,
-    .booking-table td {
-      font-size: 14px;
-      padding: 10px;
-    }
-  }
-  
+}

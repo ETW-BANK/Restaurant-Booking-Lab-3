@@ -11,7 +11,8 @@ import Admin from './Components/Admin';
 import BookingStatus from "./Components/BookingStatus";
 import CreateTable from "./Components/CreateTable";
 import Logout from './Components/Logout';
-import Navbar from './Components/Navbar'; // Import Navbar
+import Navbar from './Components/Navbar';
+import Footer from './Components/Footer';
 import "./App.css";
 
 const App = () => {
@@ -31,11 +32,11 @@ const App = () => {
   ]);
 
   return (
-    <>
-      {/* Render Navbar only once */}
+    <div className="App">
       <Navbar />
-      {routes} {/* Render routes here */}
-    </>
+      <div className="main-content">{routes}</div>
+      <Footer />
+    </div>
   );
 };
 

@@ -33,46 +33,48 @@ const Admin = () => {
       <Card className="booking-card">
         <CardHeader title="Admin Users" className="booking-card-header" />
         <CardContent>
-          <Table className="booking-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Roles</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
+          <div className="booking-table-container">
+            <Table className="booking-table">
+              <thead>
                 <tr>
-                  <td colSpan="4" className="text-center">
-                    Loading...
-                  </td>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Roles</th>
                 </tr>
-              ) : error ? (
-                <tr>
-                  <td colSpan="4" className="text-center error-message">
-                    {error}
-                  </td>
-                </tr>
-              ) : adminUsers.length > 0 ? (
-                adminUsers.map((user, index) => (
-                  <tr key={user.id}>
-                    <td>{index + 1}</td>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{user.roles.join(", ")}</td>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan="4" className="text-center">
+                      Loading...
+                    </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4" className="text-center">
-                    No admin users found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
+                ) : error ? (
+                  <tr>
+                    <td colSpan="4" className="text-center error-message">
+                      {error}
+                    </td>
+                  </tr>
+                ) : adminUsers.length > 0 ? (
+                  adminUsers.map((user, index) => (
+                    <tr key={user.id}>
+                      <td data-label="#"> {index + 1} </td>
+                      <td data-label="Name"> {user.name} </td>
+                      <td data-label="Email"> {user.email} </td>
+                      <td data-label="Roles"> {user.roles.join(", ")} </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="text-center">
+                      No admin users found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </Box>
