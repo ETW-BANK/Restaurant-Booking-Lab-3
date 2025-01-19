@@ -1,18 +1,19 @@
-/* Navbar.css */
+/* Basic reset */
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
+/* Root variables for colors */
 :root {
-    --mainColor: #29335c;
-    --mainColorLight: #5768aa6b;
+    --mainColor: #24305f;
     --secondaryColor: tomato;
     --textColor: white;
     --blueBlack: #1a1a1a; /* Blue-black color for buttons */
 }
 
+/* Header Layout */
 header {
     display: flex;
     align-items: center;
@@ -20,13 +21,26 @@ header {
     height: 80px;
     padding: 0 2rem;
     background-color: rgba(204, 206, 87, 0.418);
-    color: lightgray;
+    color: rgb(211, 211, 211);
 }
 
-.App-logo {
+.navbar-icons-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Logo Style */
+.navbar-logo {
     width: 50px;
     height: 50px;
-    pointer-events: none;
+}
+
+/* Navbar Links */
+nav {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-direction: column;
 }
 
 nav a {
@@ -34,28 +48,41 @@ nav a {
     color: rgb(9, 23, 85);
     text-decoration: none;
     font-family: 'Times New Roman', Times, serif;
+    font-size: 1.2rem;
+    transition: color 0.3s;
 }
 
 nav a:hover {
     color: var(--secondaryColor);
 }
 
-header .nav-btn {
-    padding: 5px;
-    cursor: pointer;
-    background: transparent;
+/* Navbar Button */
+.nav-btn {
+    background: none;
     border: none;
-    color: var(--textColor);
+    color: rgb(255, 255, 255);
+    font-size: 2rem;
+    cursor: pointer;
     visibility: hidden;
     opacity: 0;
-    font-size: 1.8rem;
 }
 
-nav .nav-close-btn {
+.nav-close-btn {
     visibility: hidden;
 }
 
+/* Navbar Icons */
+.nav-icons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end; 
+    
+}
+
+/* Mobile responsive styles */
 @media screen and (max-width: 1024px) {
+    /* Show hamburger icon on small screens */
     header .nav-btn {
         visibility: visible;
         opacity: 1;
@@ -64,24 +91,26 @@ nav .nav-close-btn {
         right: 2rem;
     }
 
+    /* Navbar Links for Mobile (ensure it stacks vertically) */
     header nav {
         position: fixed;
         top: 0;
         left: 0;
-        height: 60%;
+        height: 100%;
         width: 100%;
         display: flex;
-        flex-direction: column;
+        flex-direction: column; /* Stack links vertically */
         align-items: center;
         justify-content: center;
         gap: 1.5rem;
-        background-color: #15151649;
-        transition: 1s;
-        transform: translateY(-100vh);
+        background-color: #1e1e9293;
+        transition: transform 1s;
+        transform: translateY(-100vh); /* Hide initially */
     }
 
+    /* When responsive_nav class is active, show navbar */
     header .responsive_nav {
-        transform: none;
+        transform: translateY(0); /* Show when the menu is open */
     }
 
     nav .nav-close-btn {
@@ -95,129 +124,122 @@ nav .nav-close-btn {
         font-size: 1.5rem;
     }
 
-    img {
+    .nav-icon {
+        font-size: 1.2rem;
+        margin-left: 0px;
+    }
+
+    .navbar-logo {
         width: 50px;
         height: auto;
         display: inline-block;
     }
+   
+}
 
-    /* General styles */
-    header {
+/* General Styles for Navbar Links */
+@media screen and (min-width: 1024px) {
+    .navbar-links-container {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px 20px;
-        background-color: #333;
-        color: #fff;
+        flex-direction: row; /* Links in a row for large screens */
+        gap: 20px;
+        
     }
-
-    .navbar-logo {
-        height: 50px;
-    }
-
-    /* Navbar links */
-    nav {
+    
+    .center-links {
         display: flex;
         gap: 20px;
         align-items: center;
+        justify-content: flex-start;
+       
     }
 
-    nav a {
-        color: white;
-        text-decoration: none;
-        font-size: 1rem;
-        transition: color 0.3s;
+    .nav-icons {
+        flex-direction: row;
+        gap: 10px;
     }
-
-    nav a:hover {
-        color: #642331;
-    }
-
-    /* Login/Register icons */
+   
     .nav-icons {
         display: flex;
-        gap: 30px;
+        gap: 10px;
         align-items: center;
-        padding: 20px;
+        justify-content: flex-end;
     }
 
     .nav-icon {
-        color: white;
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        font-size: 1rem;
-        gap: 20px;
-        transition: color 0.3s;
-        padding: 20px;
-    }
-
-    .nav-icon:hover {
-        color: #17df17;
-    }
-
-   
-    .nav-btn, .nav-close-btn {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1.5rem;
-        cursor: pointer;
-    }
-
-    .responsive_nav {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        background-color: #333;
-        width: 100%;
-        padding: 20px;
-    }
-
-    .nav-btn {
-        display: none;
-    }
-
-    @media (max-width: 768px) {
-        nav {
-            display: none;
-        }
-
-        .responsive_nav {
-            display: flex;
-        }
-
-        .nav-btn {
-            display: block;
-        }
-
-        .nav-icons {
-            margin-top: 10px;
-            justify-content: center;
-        }
-    }
-}
-
-
-@media (min-width: 768px) {
-    .nav-icon {
-        color: var(--blueBlack); 
+        color: var(--blueBlack);
+        font-weight: bold;
+        transition: color 0.3s ease-in-out;
     }
 
     .nav-icon:hover {
         color: #58e218;
     }
 
-    
-    .nav-icon {
-        font-weight: bold;
-        transition: color 0.3s ease-in-out;
+    .nav-btn, .nav-close-btn {
+        color: white;
     }
 
-    .nav-btn, .nav-close-btn {
-        color: white; 
+    /* Align the navbar and make it responsive for larger screens */
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px ;
+        background-color: #b2c02f83;
+        color: #ffffff;
     }
+}
+
+/* Navbar icons */
+.nav-icon {
+    color: rgb(87, 46, 13);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: 1rem;
+    gap: 10px;
+    transition: color 0.3s ease-in-out;
+    padding: 10px 20px;
+}
+
+.nav-icon:hover {
+    color: #17df17;
+}
+
+/* Responsive Navbar for Smaller Screens */
+@media screen and (max-width: 768px) {
+    nav {
+        display: none;
+    }
+
+    .responsive_nav {
+        display: flex;
+        flex-direction: column; /* Ensure links are stacked vertically */
+        gap: 20px;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        background-color: #c291286c;
+        width: 100%;
+        padding: 20px;
+        height: fit-content;
+       
+
+    }
+
+    
+
+    .nav-btn {
+        display: block;
+       
+    }
+
+    .nav-icons {
+        justify-content: center;
+        
+    }
+    
 }

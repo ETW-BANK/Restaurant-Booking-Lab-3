@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaSignInAlt, FaUserPlus, FaSignOutAlt } from 'react-icons/fa';
 import './Navbar.css';
@@ -6,6 +6,7 @@ import Pic from '../assets/Logo.svg';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
     const navigate = useNavigate();
 
     const user = localStorage.getItem("user");
@@ -24,12 +25,38 @@ const Navbar = () => {
         setIsOpen(!isOpen);
     };
 
+    useEffect(() => {
+        const handleResize = () => {
+            setIsLargeScreen(window.innerWidth >= 1024);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (isLargeScreen) setIsOpen(false);
+    }, [isLargeScreen]);
+
     return (
         <header>
-            <img src={Pic} alt="Logo" className="navbar-logo" />
-            <nav className={isOpen ? 'responsive_nav' : ''}>
-                <Link to="/home">Home</Link>
+            {/* Logo */}
+            <div className="navbar-logo-container">
+                <img src={Pic} alt="Logo" className="navbar-logo" />
+            </div>
 
+            {/* Hamburger Button */}
+            <button className="nav-btn" onClick={toggleNavbar}>
+                {isOpen ? <FaTimes /> : <FaBars />}
+            </button>
+
+            {/* Navbar Links */}
+            <nav className={`navbar-links-container ${isOpen ? 'responsive_nav' : ''}`}>
+
+                <Link to="/home">Home</Link>
                 {isLoggedIn && isAdmin && (
                     <>
                         <Link to="/user-list">User List</Link>
@@ -39,28 +66,24 @@ const Navbar = () => {
                     </>
                 )}
 
-                {isLoggedIn ? (
-                    <button className="nav-icon" onClick={handleLogout} style={{ color: 'Red', backgroundColor: "transparent", border: "none", fontSize: "16px" }}>
-                        <FaSignOutAlt /> Logout
-                    </button>
-                ) : (
-                    <>
-                        <Link to="/login" className="nav-icon">
-                            <FaSignInAlt /> Login
-                        </Link>
-                        <Link to="/register" className="nav-icon">
-                            <FaUserPlus /> Register
-                        </Link>
-                    </>
-                )}
 
-                <button className="nav-close-btn" onClick={toggleNavbar}>
-                    <FaTimes />
-                </button>
+                <div className="nav-icons">
+                    {isLoggedIn ? (
+                        <button className="nav-icon" onClick={handleLogout} style={{ color: 'Red', backgroundColor: "transparent", border: "none", fontSize: "20px" }}>
+                            <FaSignOutAlt /> Logout
+                        </button>
+                    ) : (
+                        <>
+                            <Link to="/login" className="nav-icon">
+                                <FaSignInAlt /> Login
+                            </Link>
+                            <Link to="/register" className="nav-icon">
+                                <FaUserPlus /> Register
+                            </Link>
+                        </>
+                    )}
+                </div>
             </nav>
-            <button className="nav-btn" onClick={toggleNavbar}>
-                {isOpen ? <FaTimes /> : <FaBars />}
-            </button>
         </header>
     );
 };

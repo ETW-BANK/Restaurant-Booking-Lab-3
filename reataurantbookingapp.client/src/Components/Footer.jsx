@@ -5,7 +5,7 @@ import './Footer.css';
 function Footer() {
     return (
         <footer>
-        Copy-Right © Tensae Tech, 2024 E.C.
+        Copy-Right © Tensae Tech, 2025 E.C.
     </footer>
     );
 }
