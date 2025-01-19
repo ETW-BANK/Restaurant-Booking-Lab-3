@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, CardContent, CardHeader, Table, Box, Button } from '@mui/material';
-import { Link } from 'react-router-dom'; 
+import { Card, CardContent, CardHeader, Table, Box, Button, IconButton } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { FaTrash } from 'react-icons/fa'; // Import Trash icon for the delete button
 import './BookingList.css';
 
 const TableList = () => {
   const [data, setData] = useState([]);
 
+  // Fetch all tables on component mount
   useEffect(() => {
     const GetData = async () => {
       try {
         const result = await axios.get('https://localhost:7090/api/Table/GetAllTables');
         console.log('API Response:', result.data);  
-        setData(result.data); 
+        setData(result.data); // Set the fetched data into state
       } catch (error) {
         console.error('Error fetching Tables:', error);
       }
@@ -20,6 +22,22 @@ const TableList = () => {
 
     GetData();
   }, []);
+
+  // Handle deleting a table
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`https://localhost:7090/api/Table/DeleteTable/${id}`);
+      console.log(response.data); 
+
+      
+      setData((prevData) => prevData.filter(table => table.id !== id));
+
+      alert('Table Deleted Successfully');
+    } catch (error) {
+      console.error('Error deleting table:', error);
+      alert('Failed to delete table');
+    }
+  };
 
   return (
     <Box className="booking-list-container">
@@ -49,6 +67,7 @@ const TableList = () => {
                 <th>Table Number</th>
                 <th>Seats</th>
                 <th>Available</th>
+                <th>Actions</th> 
               </tr>
             </thead>
             <tbody>
@@ -60,11 +79,19 @@ const TableList = () => {
                     <td>{table.tableNumber}</td>
                     <td>{table.numberOfSeats}</td>
                     <td>{table.isAvailable ? 'Yes' : 'No'}</td>
+                    <td>
+                      <IconButton 
+                        color="secondary" 
+                        onClick={() => handleDelete(table.id)} 
+                      >
+                        <FaTrash />
+                      </IconButton>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center">
+                  <td colSpan="6" className="text-center">
                     No tables available
                   </td>
                 </tr>
